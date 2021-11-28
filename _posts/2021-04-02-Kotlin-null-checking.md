@@ -3,12 +3,10 @@ layout: post
 title: Kotlin null checking
 tags: [Kotlin]
 ---
+## `let` 으로 `if (item != null)` 을 대신할 수 있을까?  
 
 Links: https://medium.com/mobile-app-development-publication/kotlin-dont-just-use-let-7e91f544e27f  
 Last Edited: April 2, 2021 1:34 AM  
-
-
-## `let` 으로 `if (item != null)` 을 대신할 수 있을까?
 
 [https://kotlinlang.org/docs/null-safety.html#checking-for-null-in-conditions](https://kotlinlang.org/docs/null-safety.html#checking-for-null-in-conditions)
 
