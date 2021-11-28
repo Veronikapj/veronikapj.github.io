@@ -1,7 +1,12 @@
-# Kotlin null checking
+---
+layout: post
+title: Kotlin null checking
+tags: [Kotlin]
+---
 
+Links: https://medium.com/mobile-app-development-publication/kotlin-dont-just-use-let-7e91f544e27f  
 Last Edited: April 2, 2021 1:34 AM  
-Links: https://medium.com/mobile-app-development-publication/kotlin-dont-just-use-let-7e91f544e27f
+
 
 ## `let` 으로 `if (item != null)` 을 대신할 수 있을까?
 
@@ -21,11 +26,11 @@ if (item != null) { /* Do something */}
 
 -> item?.let { /* Do something */}
 ```
-</br>
 
-## 추천하지 않는 케이스
 
-### immutable variable
+## 1. 추천하지 않는 케이스
+
+### 1) immutable variable
 
 NOT RECOMMEND
 
@@ -58,9 +63,8 @@ fun process(str: String?) {
     }
 }
 ```
-</br>
 
-### 내부 변수 값 세팅
+### 2) 내부 변수 값 세팅
 
 NOT RECOMMEND
 
@@ -82,7 +86,7 @@ webviewSetting?.run {
 
 `run` 을 사용하면 `this` 가 scope로 잡히기 때문에 it 을 걷어낼 수 있다. 
 
-### 변수에 `let` 을 사용하고 나서, 그 변수 값에다 chaining 걸고 싶을 때
+### 3) 변수에 `let` 을 사용하고 나서, 그 변수 값에다 chaining 걸고 싶을 때
 
 NOT RECOMMEND
 
@@ -101,9 +105,9 @@ stringList?.also {
 }?.forEach{ println(it) }
 ```
 
-## `LET` 사용을 추천하는 케이스
+## 2. `LET` 사용을 추천하는 케이스
 
-### mutable variable 의 null을 체크하는 경우 let 을 사용하면 scope 내에서 immutable 보장
+### 1) mutable variable 의 null을 체크하는 경우 let 을 사용하면 scope 내에서 immutable 보장
 
 RECOMMEND
 
@@ -130,7 +134,7 @@ fun process() {
 }
 ```
 
-### 외부에 있는 변수와 구분
+### 2) 외부에 있는 변수와 구분
 
 RECOMMEND
 
@@ -158,7 +162,7 @@ webviewSetting?.run {
 }
 ```
 
-### long nullable chain
+### 3) long nullable chain
 
 RECOMMEND
 
