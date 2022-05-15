@@ -1,6 +1,9 @@
 ---
 layout: post
 title: Google IO Keynote
+color: rgb(250, 50, 50)
+feature-img: "assets/img/feature-img/io-big-logo.svg"
+thumbnail: "assets/img/feature-img/io-big-logo.svg"
 tags: [GoogleIO, Keynote, 2022]
 ---
 
