@@ -4,6 +4,9 @@ title: Google IO Keynote
 tags: [GoogleIO, Keynote, 2022]
 ---
 
+다양한 방법으로 검색이 가능해진다. 자연어 검색을 강화하고, 유튜브와 문서를 빠르게 파악할 수 있는 방법도 제공한다.  
+이런 머신러닝 기술을 바탕으로 안드로이드 Pixel, Watch, Tablet, Buds 으로 하드웨어 생태계를 구축을 강화하는 것으로 보인다.  
+
 # Intro
 
 ### Google 번역
