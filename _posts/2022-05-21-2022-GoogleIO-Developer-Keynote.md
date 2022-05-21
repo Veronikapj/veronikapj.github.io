@@ -5,15 +5,14 @@ color: rgb(250, 50, 50)
 feature-img: "assets/img/feature-img/io-big-logo.svg"
 tags: [GoogleIO, Keynote, 2022, Android, Flutter, Firebase, Developer]
 ---
-
-{ % youtube "https://www.youtube.com/watch?v=qBkyU1TJKDg" % }
-
-
-![Developer Keynote (Google I_O '22) 1-51 screenshot](https://user-images.githubusercontent.com/360685/169647324-cd546bc8-11a1-4dba-97a5-63f5056778ad.png)
-
 ### Work better together 
  - 제품을 서로 연결 (connecting our products) 
  - workflow 를 향상시키는 것을 돕기 위한 Providing guidance and best practices 
+
+### Keynote 보러가기 
+[![키노트 영상](http://img.youtube.com/vi/qBkyU1TJKDg/0.jpg)](https://youtu.be/qBkyU1TJKDg?t=0s)
+
+![Developer Keynote (Google I_O '22) 1-51 screenshot](https://user-images.githubusercontent.com/360685/169647324-cd546bc8-11a1-4dba-97a5-63f5056778ad.png)
 
 # AR Core (Augmented Reality)
 
