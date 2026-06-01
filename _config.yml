@@ -1,57 +1,45 @@
 # SITE CONFIGURATION
-baseurl: ""
+title: PilJu's Blog
+description: "주로 안드로이드 관련 자료 노트와 일상"
 url: "https://veronikapj.github.io"
+baseurl: ""
 
-# THEME-SPECIFIC CONFIGURATION
-title: PilJu's Blog                                  # site's title
-description: "주로 안드로이드 관련 자료 노트와 일상"      # used by search engines
-avatar: assets/img/profile.png                         # Empty for no avatar in navbar
-favicon: assets/favicon.ico                             # Icon displayed in the tab
+# Profile details
+author:
+  name: "PilJu"
+  bio: "안드로이드 개발을 사랑하는 소프트웨어 엔지니어. 일상과 다양한 기술 노트를 정리합니다."
+  avatar: "/assets/img/profile.png"
+  github: "Veronikapj"
 
-# Header and footer text
-# header_text: Change <code>header_text</code> in <code>_config.yml</code>  # Change Blog header text
-header_text: 일상과 개발 노트
-header_feature_image: assets/img/pexels/leaves.jpeg
-footer_text: >
-  Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type on Strap</a>
-
-# Blog
-excerpt: true                                           # Or "truncate" (first 250 characters), "false" to disable
-post_navigation: true
-color_image: /assets/img/lineart.png                    # A bit transparent for color posts.
-
-# Features
-# More in the _data folder for share buttons, author and language
-# For layout customization, go to the "_sass > base" folder, and check "_variables.scss"
-katex: true                                             # Enable if using math markup
-mermaid: true                                           # Enable mermaid-js for sequence and diagrams
-google_analytics:                                       # Tracking ID, e.g. "UA-000000-01"
-cookie_consent: false                                   # To respect the usage of cookies
-color_theme: auto                                       # auto, dark or light
-
-# Comments
-comments:
-  disqus_shortname:                                     # Your discus shortname for comments
-  cusdis_app_id:                                        # Your cusdis data-app-id
-  utterances:                                           # Enable by filling below information. For more info, go to https://utteranc.es
-    repo:                                               # your public comments repository (e.g. owner/repo)
-    issue-term:                                         # Issue term (e.g. "comment" consider issues with this word in the title as comments)
+# Projects & Presentations Showcase
+projects:
+  - title: "MediaPipe Codelab"
+    description: "MediaPipe를 이용한 온디바이스 머신러닝 실습 및 가이드 코드랩 발표 자료"
+    url: "/MediaPipe-Codelab/"
+    github: "https://github.com/Veronikapj/MediaPipe-Codelab"
+  - title: "Tarot Codelab"
+    description: "타로 카드를 모티브로 웹 기술을 적용해 구현해 보는 인터랙티브 코드랩"
+    url: "/Tarot-Codelab/"
+    github: "https://github.com/Veronikapj/Tarot-Codelab"
+  - title: "The Essence of Team Play"
+    description: "성공적인 협업과 개발자 팀워크의 본질에 대해 정리한 세미나 발표 자료"
+    url: "/The-essence-of-team-play/"
+    github: "https://github.com/Veronikapj/The-essence-of-team-play"
+  - title: "DevFest Tarot Blog"
+    description: "GDG DevFest에서 공유한 AI 기반 타로 상담 블로그 프로젝트 실습 자료"
+    url: "/devfest-tarot-blog/"
+    github: "https://github.com/Veronikapj/devfest-tarot-blog"
+  - title: "AI Intent Matters"
+    description: "인공지능 및 대화형 인터페이스 설계에서 의도(Intent) 분석의 핵심 발표 자료"
+    url: "/ai-intent-matters/"
+    github: "https://github.com/Veronikapj/ai-intent-matters"
 
 # PAGINATION
 paginate: 5
 paginate_path: "/blog/page:num"
 
-# PORTFOLIO
-# collections:
-#   portfolio:
-#     output: true
-#     permalink: /:collection/:name
-
 # BUILD SETTINGS
 sass:
   style: compressed
 plugins: [jekyll-paginate, jekyll-seo-tag, jekyll-feed]
-exclude: [".jekyll-cache", ".idea", "vendor/*", "assets/node_modules/*"]
-
-# theme: type-on-strap                                  # if using the theme as a jekyll theme gem
-remote_theme: sylhare/Type-on-Strap                     # If using as a remote_theme in github
+exclude: [".jekyll-cache", ".idea", "vendor/*", "assets/node_modules/*", "README.md", "LICENSE"]

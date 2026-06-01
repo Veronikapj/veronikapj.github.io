@@ -1,0 +1,39 @@
+---
+layout: default
+---
+
+<article class="post-container">
+  <header class="post-header">
+    <div class="post-header-meta">
+      <time datetime="{{ page.date | date_to_xmlschema }}" class="post-header-date">
+        {{ page.date | date: "%Y년 %m월 %d일" }}
+      </time>
+      <span class="post-header-reading-time">
+        {% assign word_count = page.content | strip_html | size %}
+        {% assign read_time = word_count | divided_by: 400 | plus: 1 %}
+        ☕️ {{ read_time }}분 분량
+      </span>
+    </div>
+    <h1 class="post-title">{{ page.title }}</h1>
+    {% if page.tags.size > 0 %}
+      <div class="post-header-tags">
+        {% for tag in page.tags %}
+          <span class="tag-badge">#{{ tag }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </header>
+
+  <div class="post-body">
+    {{ content }}
+  </div>
+
+  <footer class="post-footer">
+    <a href="{{ '/' | relative_url }}" class="back-to-home">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m15 18-6-6 6-6"></path>
+      </svg>
+      목록으로 돌아가기
+    </a>
+  </footer>
+</article>
