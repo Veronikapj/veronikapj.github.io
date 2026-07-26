@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's New in Android 2026 · Compose First부터 멀티 디바이스까지 | 배필주</title>
+<meta name="description" content="2026년 Android의 핵심 변화 6가지를 실무 관점으로 정리합니다. Compose First, R8·Memory Limiter, AI 에이전트, 프라이버시·보안, Media3, 그리고 Adaptive by Default.">
+<meta property="og:title" content="What's New in Android 2026">
+<meta property="og:description" content="Compose First · 성능 · AI 에이전트 · 프라이버시 · Media3 · 멀티 디바이스. 30분 기술 세션을 블로그로.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --coral:#EA4335; --coral-dark:#C5221F; --coral-bg:#FDECEA;
+    --ink:#202124; --body:#33373b; --gray:#5f6368; --lgray:#9aa0a6;
+    --line:#e6e8eb; --bg:#ffffff; --soft:#f6f8fa;
+    --code-bg:#1f2023; --code-fg:#e8eaed;
+    --amber:#B06000; --amber-bg:#FEF7E0; --green:#188038; --green-bg:#E6F4EA; --blue:#1a73e8;
+    --maxw:768px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--body);
+    font-family:'Noto Sans KR',system-ui,-apple-system,sans-serif;
+    font-size:18px; line-height:1.78; -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--blue); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 22px}
+
+  /* Hero */
+  header.hero{
+    background:radial-gradient(120% 140% at 78% 10%, #14245c 0%, #0b1330 46%, #05060f 100%);
+    color:#fff; padding:70px 0 60px; position:relative; overflow:hidden;
+  }
+  header.hero .wrap{position:relative; z-index:2}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.14em;color:#cfe0ff;text-transform:uppercase;margin-bottom:18px}
+  .kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--coral)}
+  header.hero h1{font-size:44px;line-height:1.18;font-weight:800;margin:0 0 16px;letter-spacing:-.01em}
+  header.hero p.lead{font-size:19px;color:#c7d4e8;margin:0 0 26px;max-width:620px}
+  .byline{display:flex;align-items:center;gap:14px;font-size:15px;color:#aebbd0}
+  .byline b{color:#fff;font-weight:700}
+  .glow{position:absolute;right:-120px;top:-80px;width:420px;height:420px;border-radius:50%;
+    background:conic-gradient(from 210deg,#ff7a59,#ffd34e,#4fbf6a,#3f8fe0,#a06cff,#ff7a59);
+    filter:blur(30px);opacity:.34;z-index:1}
+
+  /* TOC */
+  nav.toc{background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:22px 26px;margin:40px 0}
+  nav.toc h2{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gray);margin:0 0 14px}
+  nav.toc ol{margin:0;padding:0;list-style:none;counter-reset:t}
+  nav.toc li{counter-increment:t;padding:7px 0;border-bottom:1px dashed var(--line);display:flex;gap:14px;align-items:baseline}
+  nav.toc li:last-child{border-bottom:0}
+  nav.toc li::before{content:counter(t);flex:0 0 26px;height:26px;line-height:26px;text-align:center;background:var(--coral);color:#fff;border-radius:50%;font-size:13px;font-weight:800;font-family:'Roboto Mono',monospace}
+  nav.toc a{color:var(--ink);font-weight:500}
+  nav.toc .sub{color:var(--gray);font-size:14px;font-weight:400}
+
+  main .wrap>p{margin:20px 0}
+  article section{padding:46px 0 8px;border-top:1px solid var(--line)}
+  article section:first-of-type{border-top:0}
+  .sec-tag{display:inline-block;font-size:13px;font-weight:800;color:var(--coral);letter-spacing:.02em;margin-bottom:6px}
+  h2.sec{font-size:31px;font-weight:800;color:var(--ink);line-height:1.28;margin:2px 0 6px;letter-spacing:-.01em}
+  .rule{width:60px;height:5px;border-radius:3px;background:var(--coral);margin:14px 0 24px}
+  h3{font-size:21px;font-weight:700;color:var(--ink);margin:34px 0 10px}
+  p{margin:16px 0}
+  strong{font-weight:700;color:var(--ink)}
+  em.q{font-style:italic;color:var(--gray)}
+
+  /* code */
+  pre{background:var(--code-bg);color:var(--code-fg);border-radius:12px;padding:18px 20px;overflow-x:auto;
+    font-family:'Roboto Mono',monospace;font-size:14.5px;line-height:1.62;margin:22px 0}
+  pre .tab{display:block;color:#8a8f98;font-size:12.5px;margin-bottom:10px}
+  pre .c{color:#7f848e;font-style:italic}
+  pre .k{color:#c678dd}
+  pre .t{color:#e5c07b}
+  pre .f{color:#61afef}
+  pre .n{color:#d19a66}
+  pre .s{color:#98c379}
+  code:not(pre code){background:#f0f2f4;color:#b0322a;font-family:'Roboto Mono',monospace;font-size:.9em;padding:2px 6px;border-radius:6px}
+
+  /* callouts */
+  .box{border-radius:14px;padding:18px 22px;margin:24px 0;border:1px solid var(--line)}
+  .box p{margin:8px 0}
+  .box .lbl{font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:6px}
+  .box.must{background:var(--coral-bg);border-color:#f4b6ae}
+  .box.must .lbl{color:var(--coral-dark)}
+  .box.tip{background:var(--green-bg);border-color:#bfe0c9}
+  .box.tip .lbl{color:var(--green)}
+  .box.warn{background:var(--amber-bg);border-color:#f2d98a}
+  .box.warn .lbl{color:var(--amber)}
+  .box.note{background:var(--soft)}
+  .box.note .lbl{color:var(--gray)}
+
+  /* action items */
+  .actions{background:var(--soft);border:1px solid var(--line);color:var(--body);border-radius:16px;padding:22px 24px;margin:28px 0}
+  .actions h4{margin:0 0 12px;color:var(--ink);font-size:15px;letter-spacing:.02em}
+  .actions ol{margin:0;padding-left:0;list-style:none;counter-reset:a}
+  .actions li{counter-increment:a;position:relative;padding:8px 0 8px 42px;border-bottom:1px solid var(--line);font-size:16px;line-height:1.6}
+  .actions li:last-child{border-bottom:0}
+  .actions li::before{content:counter(a);position:absolute;left:0;top:9px;width:24px;height:24px;line-height:24px;text-align:center;background:var(--coral);color:#fff;border-radius:50%;font-size:12.5px;font-weight:800;font-family:'Roboto Mono',monospace}
+  .actions code{background:#f0f2f4;color:#b0322a}
+
+  /* stat row */
+  .stats{display:flex;gap:16px;flex-wrap:wrap;margin:24px 0}
+  .stat{flex:1;min-width:150px;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:18px 20px;text-align:center}
+  .stat b{display:block;font-size:34px;font-weight:800;color:var(--coral-dark);line-height:1.1;font-family:'Roboto Mono',monospace}
+  .stat span{font-size:14px;color:var(--gray)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;margin:22px 0;font-size:15.5px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
+  th{color:var(--gray);font-weight:700;font-size:13px;letter-spacing:.03em;text-transform:uppercase}
+  td code{font-size:.86em}
+
+  .pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:20px;vertical-align:middle}
+  .pill.red{background:var(--coral-bg);color:var(--coral-dark)}
+  .pill.yellow{background:var(--amber-bg);color:var(--amber)}
+  .pill.green{background:var(--green-bg);color:var(--green)}
+
+  .refs{font-size:14px;color:var(--gray);margin:18px 0 4px;padding-left:0;list-style:none}
+  .refs li{padding:3px 0}
+  .refs li::before{content:"↳";color:var(--lgray);margin-right:8px}
+
+  figure.fig{margin:28px 0}
+  figure.fig img{width:100%;border:1px solid var(--line);border-radius:14px;display:block;background:#fff}
+  figure.fig figcaption{font-size:13.5px;color:var(--lgray);margin-top:10px;text-align:center}
+  figure.fig .src{color:#b9bdc2}
+  p.tsrc{font-size:13px;color:var(--lgray);margin:-6px 0 8px}
+  p.tsrc a{color:var(--gray)}
+  footer{border-top:1px solid var(--line);margin-top:50px;padding:40px 0 70px;color:var(--gray);font-size:15px}
+  footer .lock{font-weight:800;color:var(--ink)}
+  footer .lock .ex{color:var(--coral)}
+
+  @media(max-width:600px){
+    body{font-size:16.5px}
+    header.hero h1{font-size:33px}
+    h2.sec{font-size:25px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="glow"></div>
+  <div class="wrap">
+    <span class="kicker"><span class="dot"></span> Tech Session · 2026</span>
+    <h1>What's New in Android 2026</h1>
+    <p class="lead">Compose First부터 성능, AI 에이전트, 프라이버시, 미디어, 멀티 디바이스까지. 2026년 Android의 핵심 변화 여섯 가지를, "내일 출근해서 바로 써볼 수 있는 것" 위주로 정리했습니다.</p>
+    <div class="byline"><b>배필주 · Bae Pilju</b></div>
+    <p style="margin:16px 0 0;font-size:15px;line-height:1.6;color:#c7d4e8">이 글은 <strong style="color:#fff">GDG Korea Android</strong>의 <strong style="color:#fff">Google I/O Extended</strong>에서 발표한 세션을 블로그로 옮긴 것입니다. <a href="https://speakerdeck.com/veronikapj/whats-new-in-android-2026" style="color:#8fb4ff;text-decoration:underline">발표 슬라이드 보기 →</a></p>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <p>지금 맡고 있는 프로젝트에 <strong>RecyclerView</strong>나 <strong>Fragment</strong>가 아직 남아 있을 겁니다. 그런데 2026년부터 이 컴포넌트들의 위치가 조금 바뀌었습니다. 이 글은 Google I/O 2026에서 나온 새로운 소식이 무엇인지 정리한 것입니다.</p>
+
+  <p>크게 여섯 갈래입니다. UI(Compose), 성능과 빌드, AI 에이전트, 프라이버시·보안, 미디어, 그리고 멀티 디바이스. 각 주제에서 Android 17과 이번 I/O로 무엇이 달라졌는지, 실무에서는 무엇을 먼저 챙겨야 하는지를 순서대로 살펴봅니다.</p>
+
+  <nav class="toc" aria-label="목차">
+    <h2>오늘의 여섯 가지</h2>
+    <ol>
+      <li><a href="#t1">개발 환경 &amp; UI</a> <span class="sub">· Compose First &amp; Migration Skills</span></li>
+      <li><a href="#t2">성능 &amp; 빌드 최적화</a> <span class="sub">· R8 Analyzer &amp; Memory Limiter</span></li>
+      <li><a href="#t3">AI &amp; 지능형 에이전트</a> <span class="sub">· App Functions &amp; Gemini Nano 4</span></li>
+      <li><a href="#t4">프라이버시 &amp; 보안</a> <span class="sub">· Pickers &amp; Credential Manager</span></li>
+      <li><a href="#t5">미디어 &amp; 시스템 통합</a> <span class="sub">· Media3 표준화</span></li>
+      <li><a href="#t6">멀티 디바이스 생태계</a> <span class="sub">· Adaptive by Default</span></li>
+    </ol>
+  </nav>
+
+<article>
+
+  <!-- ===================== TOPIC 1 ===================== -->
+  <section id="t1">
+    <span class="sec-tag">01 · 개발 환경 &amp; UI</span>
+    <h2 class="sec">Android is Compose-first</h2>
+    <div class="rule"></div>
+
+    <p>공식 문서의 표현을 그대로 옮기면, <strong>View 툴킷은 이제 유지보수 모드(maintenance mode)</strong>입니다. <em class="q">"it will only receive updates for highly critical fixes"</em> · 신규 기능은 나오지 않고, 치명적인 수정만 반영됩니다. 버전만 봐도 방향이 읽히는데, 신규 기능 기준으로는 표에 적힌 지금 버전이 사실상 View 시스템의 마지막 모습이 될 가능성이 큽니다.</p>
+
+    <table>
+      <thead><tr><th>라이브러리</th><th>최신 stable</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td>RecyclerView</td><td><code>1.4.0</code> (2025.12)</td><td>유지보수 마커</td></tr>
+        <tr><td>Fragment</td><td><code>1.8.9</code> (2026.07)</td><td></td></tr>
+        <tr><td>ConstraintLayout</td><td><code>2.2.1</code> (2025.02)</td><td>유지보수 마커</td></tr>
+        <tr><td>ViewPager2</td><td><code>1.1.0</code> (2024.05)</td><td>2024년 이후 정체</td></tr>
+        <tr><td>DataBinding</td><td>AGP 내장</td><td>별도 버전 없음</td></tr>
+      </tbody>
+    </table>
+    <p class="tsrc">버전 출처: <a href="https://developer.android.com/jetpack/androidx/versions/stable-channel">AndroidX Stable Channel</a> · <a href="https://developer.android.com/jetpack/androidx/versions">AndroidX releases</a> (2026.07 기준)</p>
+    <p>그 방향은 이름 그대로 <strong>Compose-first</strong>입니다. 물론 지금 당장 전면 재작성을 하라는 뜻은 아닙니다. 공식 블로그도 <em class="q">"adopt Compose at your own pace"</em>, 각자의 속도에 맞춰 도입하되 신규 코드는 Compose로 작성할 것을 권고합니다. 기존 View는 interop으로 계속 동작합니다.</p>
+    <figure class="fig"><img src="img/t1_compose_first.png" alt="Android is Compose-first · 새 Android UI는 Compose로" loading="lazy"><figcaption>Android is Compose-first · 새 Android UI는 Compose로 <span class="src">· 출처: Android Developers</span></figcaption></figure>
+
+    <h3>Styles API · 스타일링을 재사용 가능한 객체로</h3>
+    <p>Compose 쪽 변화도 하나 짚어 둡니다. 그동안 스타일링은 <code>Modifier</code> 체인뿐이었죠. <code>padding</code>, <code>background</code>, <code>clip</code>을 컴포넌트마다 반복해서 붙였습니다. 이제는 <a href="https://developer.android.com/develop/ui/compose/styles/fundamentals"><strong>Style 객체</strong></a>로 한 번 정의하고 여러 곳에서 재사용할 수 있습니다.</p>
+    <pre><span class="tab">Before → After</span><span class="c">// Before: Modifier 체인을 매번 반복</span>
+<span class="t">Column</span>(<span class="t">Modifier</span>.<span class="f">padding</span>(<span class="n">16</span>.dp).<span class="f">background</span>(<span class="t">Blue</span>).<span class="f">clip</span>(<span class="t">Shape</span>)) { ... }
+
+<span class="c">// After: Style로 한 번 정의하고 재사용</span>
+<span class="k">val</span> cardStyle = <span class="t">Style</span> { <span class="f">padding</span>(<span class="n">16</span>.dp); <span class="f">background</span>(<span class="t">Blue</span>) }
+<span class="t">Column</span>(style = cardStyle)
+<span class="t">Row</span>(style = cardStyle)</pre>
+    <ul>
+      <li><strong>구성 요소</strong>: <code>background</code>·<code>border</code>·<code>shape</code> 같은 시각 속성과 <code>fontSize</code>·<code>fontWeight</code> 같은 타이포그래피 속성을 하나의 객체로.</li>
+      <li><strong>적용 방식</strong>: <code>style</code> 파라미터를 받는 컴포넌트에는 그대로 넘기고, 그 파라미터가 없는 컴포넌트에는 <code>Modifier.styleable</code>로.</li>
+      <li><strong>재사용성</strong>: <code>Style { … }</code>로 한 번 정의해 여러 곳에서 같은 객체를 쓰고, 값을 바꿀 때도 정의 한 곳만 고칩니다.</li>
+    </ul>
+    <div class="box warn"><span class="lbl">주의점 · 속성 누적 규칙</span><p>속성이 누적되는 Modifier 체인과 달리, Style 안에서 같은 속성을 여러 번 지정하면 <strong>마지막 값만 적용</strong>됩니다.</p></div>
+    <p>왜 나왔는지는 네 가지로 정리됩니다.</p>
+
+    <p><strong>① 재사용</strong> · 공통 외형을 객체로 추출해 여러 컴포넌트가 공유합니다.</p>
+    <pre><span class="k">val</span> card = <span class="t">Style</span> { <span class="f">background</span>(<span class="t">Blue</span>); <span class="f">padding</span>(<span class="n">16</span>.dp) }
+<span class="t">Column</span>(style = card)   <span class="c">// 같은 객체를</span>
+<span class="t">Row</span>(style = card)      <span class="c">// 여러 곳에서 공유</span></pre>
+
+    <p><strong>② 속성 상속</strong> · 이게 핵심입니다. Modifier는 자식으로 전파되지 않지만, Style은 <code>typography</code>·<code>contentColor</code> 같은 속성이 하위 컴포넌트로 상속·전파됩니다(CSS cascade와 동일).</p>
+    <pre><span class="k">val</span> section = <span class="t">Style</span> { <span class="f">fontSize</span>(<span class="n">18</span>.sp); <span class="f">contentColor</span>(<span class="t">Blue</span>) }
+<span class="t">Column</span>(<span class="t">Modifier</span>.<span class="f">styleable</span>(section)) {
+    <span class="t">Text</span>(<span class="s">"제목"</span>)   <span class="c">// fontSize·color 상속</span>
+    <span class="t">Text</span>(<span class="s">"본문"</span>)   <span class="c">// 동일하게 상속</span>
+}</pre>
+    <p>단, 모든 속성이 상속되는 것은 아닙니다. 같은 컨테이너에 두 속성을 함께 걸어 보면 차이가 드러납니다.</p>
+    <pre><span class="t">Row</span>(<span class="t">Modifier</span>.<span class="f">styleable</span> {
+    <span class="f">background</span>(<span class="t">Blue</span>)     <span class="c">// 시각 속성 → Row에만 칠해짐 (non-inherited)</span>
+    <span class="f">contentColor</span>(<span class="t">White</span>)  <span class="c">// 텍스트 속성 → 자식까지 내려감 (inherited)</span>
+}) {
+    <span class="t">Text</span>(<span class="s">"Content"</span>)  <span class="c">// 배경색은 못 받고, 글자색만 상속받음</span>
+}</pre>
+    <p>즉 <code>background</code>·<code>padding</code> 같은 시각·레이아웃 속성은 <a href="https://developer.android.com/develop/ui/compose/styles/fundamentals#apply-styles-with-modifier"><code>styleable</code></a>을 건 컨테이너에만 적용되고, <code>contentColor</code>·<code>fontSize</code> 같은 텍스트 계열 속성만 <a href="https://developer.android.com/develop/ui/compose/styles/fundamentals#inherited-properties">하위 컴포넌트로 상속</a>됩니다.</p>
+
+    <p><strong>③ 역할 분리</strong> · 큰 그림부터 보면, <strong>Style은 내부적으로 특수한 Modifier</strong>입니다. 그래서 <strong>Modifier는 Style이 하는 일을 모두 할 수 있지만, 그 반대는 성립하지 않습니다.</strong> Style은 Modifier를 보완할 뿐 대체하지는 못하죠. 공식 <a href="https://developer.android.com/develop/ui/compose/styles/styles-vs-modifiers">Styles vs Modifiers</a> 가이드의 구분은 이렇습니다. 기존 컴포넌트의 기본값을 덮어쓰거나, 색·크기 같은 시각 속성을 자주 애니메이션하거나, 테마 전역 속성을 정의할 때는 <strong>Style</strong>. 클릭·제스처 같은 동작을 붙이거나, 일회성 커스텀 레이아웃을 짜거나, 속성을 누적해야 할 때는 <strong>Modifier</strong>.</p>
+    <pre><span class="t">Box</span>(
+    <span class="t">Modifier</span>
+        .<span class="f">clickable</span> { }        <span class="c">// 동작(입력 처리)은 Modifier</span>
+        .<span class="f">styleable</span>(cardStyle) <span class="c">// 시각 속성은 Style</span>
+)</pre>
+    <div class="box note"><span class="lbl">헷갈리기 쉬운 지점</span><p>패딩·크기·배경·그림자처럼 레이아웃·드로잉에 가까운 속성도 Style이 다룹니다. 그래서 경계는 <em class="q">외형 vs 레이아웃·드로잉</em>이 아닙니다. 진짜 구분 축은 이렇습니다.</p>
+    <ul>
+      <li><strong>Modifier</strong>: 동작(클릭·제스처), 일회성 커스텀 레이아웃, 속성 누적이 필요할 때</li>
+      <li><strong>Style</strong>: 재사용, 테마 전역 적용, 시각 속성 애니메이션이 필요할 때</li>
+    </ul></div>
+
+    <p><strong>④ 디자인 시스템</strong> · 우리 컴포넌트에 <code>style</code> 파라미터를 노출하면 스타일을 코드로 표준화할 수 있습니다.</p>
+    <pre><span class="k">@Composable</span>
+<span class="k">fun</span> <span class="f">BrandButton</span>(style: <span class="t">Style</span> = <span class="t">Style</span> { }) { … }
+
+<span class="t">BrandButton</span>(style = primary)   <span class="c">// 스타일을 파라미터로 표준화</span></pre>
+
+    <div class="box note">
+      <span class="lbl">정리 · Style은 Modifier를 보완합니다</span>
+      <p>공식 문서도 <em class="q">"not everything that is a modifier can be replicated with a Style"</em>라고 말합니다. 앞서 봤듯 Style은 재사용·테마 가능한 시각 속성을 얹은 층이고, 동작과 일회성 레이아웃은 그대로 Modifier가 맡습니다. <a href="https://www.youtube.com/watch?v=e-wlF3cmJms">I/O 2026에서 공개</a>돼 Compose 1.11(BOM 2026.04.01)에 들어 있지만, <strong>아직 <code>@Experimental</code></strong>이라 바뀔 수 있습니다.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>77%↓</b><span>객체 할당 (공식 벤치마크)</span></div>
+      <div class="stat"><b>59%↓</b><span>실행 시간 (basic_box_border_change)</span></div>
+    </div>
+    <p>성능 이점도 있습니다. 시각 속성이 자주 바뀌는 상황에서 Style은 Composition을 건너뛰고 Layout·Draw 단계에서 값을 갱신하기 때문입니다. 박스 테두리 색만 바꾸는 <a href="https://developer.android.com/blog/posts/whats-new-in-the-jetpack-compose-april-26-release">공식 벤치마크</a>(<code>basic_box_border_change</code>)에서 Modifier 방식 대비 <strong>객체 할당 약 77%, 실행 시간 약 59%</strong>가 줄었습니다.</p>
+
+    <h3>마이그레이션은 "우리 것으로 튜닝한 Skill"로</h3>
+    <p>남은 마이그레이션은 어떻게 할까요. Google이 공식 Compose 마이그레이션 <strong>Android Skill</strong>을 냈습니다. 만든 기준이 흥미로운데, <em class="q">"workflows where evaluations show LLMs underperform"</em> · LLM이 평가상 자주 틀리는 작업을 스킬로 묶었다고 합니다.</p>
+    <pre>android skills add <span class="n">--skill</span>=jetpack-compose</pre>
+    <p>하지만 제가 있는 팀에서는 이걸 그대로 쓰지 않았습니다. 이 스킬은 <em class="q">"a structured, 10-step methodology"</em>로 XML을 Compose로 옮기는데, UI 변환만 담당한다고 명시돼 있습니다. 문제는 이 스킬이 상태 관리 전략을 에이전트 판단에 맡긴다는 점입니다(레퍼런스 1절의 <em class="q">"appropriate state management strategy"</em>). 실제로 돌려보면 에이전트가 UDF·상태 호이스팅 쪽으로 코드를 끌고 가, 기존 MVVM 구조와 부딪히는 경우가 있었습니다. 그래서 컬리에서는 이렇게 커스텀했습니다.</p>
+    <ul>
+      <li><strong>Step 3 계획 · Step 7 변환</strong> · ViewModel 흐름을 유지하도록, MVVM 고정으로 커스텀 (UDF 강제 전환 차단)</li>
+      <li><strong>Step 4 기준 UI 캡처</strong> · 이미 쓰던 사내 스크린샷 스킬로 대체</li>
+      <li><strong>Step 6 테마</strong> · Kurly 브랜드 테마 매핑 (부분 커스텀)</li>
+    </ul>
+    <p>UI 마이그레이션에 아키텍처 변경까지 얹으면 문제가 생겼을 때 원인이 화면 전환 탓인지 구조 변경 탓인지 가려내기 어렵고 리뷰·롤백 비용도 커지므로, 한 번에 화면만 바꾸고 구조는 그대로 두는 편이 안전합니다.</p>
+    <p>나머지 표준 단계는 그대로 쓰고, 우리 팀에 안 맞는 부분만 갈아 끼운 겁니다. 커스텀 스킬은 <code>.skills/</code>에 팀 버전으로 커밋해 공유합니다.</p>
+    <figure class="fig"><img src="img/slide_migration_10steps.png" alt="공식 10단계 마이그레이션 스킬 · 컬리가 커스텀한 지점(코랄)" loading="lazy"><figcaption>공식 10단계 마이그레이션 스킬 · 컬리가 커스텀한 지점(코랄)</figcaption></figure>
+
+    <div class="box tip">
+      <span class="lbl">스킬 목록 = 오늘의 목차</span>
+      <p>재미있는 건, Android Skill 하나가 오늘 주제 하나로 이어진다는 점입니다. <code>jetpack-compose</code>(1) · <code>r8-analyzer</code>(2) · <code>appfunctions</code>(3) · <code>intent-security</code>(4) · <code>wear-compose-m3</code>(6).</p>
+      <p><a href="https://github.com/android/skills">android/skills 저장소</a>는 지금도 활발히 업데이트되고 있으니, 다른 스킬도 한번 둘러보세요.</p>
+    </div>
+
+    <div class="actions">
+      <h4>내일 할 일</h4>
+      <ol>
+        <li>신규 화면은 Compose로 시작 · 팀 룰로 고정</li>
+        <li>마이그레이션엔 Skill 적용하되, 공식 스킬을 그대로 쓰지 말고 우리 아키텍처에 맞게 커스텀해 <code>.skills/</code>에 커밋</li>
+      </ol>
+    </div>
+    <ul class="refs">
+      <li><a href="https://developer.android.com/develop/ui/compose/first">Compose-first</a></li>
+      <li><a href="https://developer.android.com/develop/ui/compose/styles/fundamentals">Styles fundamentals</a> · <a href="https://developer.android.com/develop/ui/compose/styles/styles-vs-modifiers">Styles vs Modifiers</a></li>
+      <li><a href="https://developer.android.com/tools/agents/android-skills">Android Skills</a> · <a href="https://github.com/android/skills">github.com/android/skills</a></li>
+    </ul>
+  </section>
+
+  <!-- ===================== TOPIC 2 ===================== -->
+  <section id="t2">
+    <span class="sec-tag">02 · 성능 &amp; 빌드 최적화</span>
+    <h2 class="sec">앱을 가볍게 만드는 두 방향</h2>
+    <div class="rule"></div>
+    <p>빌드 타임에 앱을 줄이는 <strong>R8</strong>, 그리고 런타임 메모리를 관리하는 <strong>Android 17 Memory Limiter</strong>. 둘 다 앱을 가볍게 만드는 이야기입니다. 런타임 쪽부터 살펴봅니다.</p>
+
+    <h3>Android 17 Memory Limiter</h3>
+    <p>Android 17은 기기 총 RAM 기준으로 <strong>앱별 메모리 상한</strong>을 두기 시작했습니다. 공식 표현 그대로 <em class="q">"if an app exceeds those limits, Android will kill the process with no associated stack trace."</em> 이 한도를 넘으면 <strong>스택 트레이스 없이 프로세스가 종료</strong>됩니다.</p>
+    <p>왜 이렇게까지 할까요. 앱 하나가 메모리를 독점하면, 시스템(LMK)이 공간을 확보하려고 멀쩡한 다른 캐시 앱들을 대신 죽입니다. 이 <a href="https://developer.android.com/blog/posts/prioritizing-memory-efficiency-essential-steps-for-android-17"><strong>연쇄 킬(cascading kills)</strong></a>을 막으려는 겁니다. 지금은 시스템 기준선을 잡는 단계라 한도를 보수적으로 설정해, 극단적인 누수나 이상치부터 겨냥합니다.</p>
+    <figure class="fig"><img src="img/slide_cascading_kills.png" alt="상한이 없을 때의 연쇄 킬 vs Android 17의 앱별 상한" loading="lazy"><figcaption>상한이 없을 때의 연쇄 킬 vs Android 17의 앱별 상한<br><span class="src">출처: <a href="https://developer.android.com/blog/posts/prioritizing-memory-efficiency-essential-steps-for-android-17">Prioritizing Memory Efficiency</a>, <a href="https://developer.android.com/about/versions/17/behavior-changes-all">Behavior changes: all apps</a></span></figcaption></figure>
+
+    <p>문제는 크래시 로그가 안 남는다는 것. 그래서 <strong>탐지</strong>가 중요합니다. 공식 문서가 안내하는 확인 방법은 <a href="https://developer.android.com/blog/posts/prioritizing-memory-efficiency-essential-steps-for-android-17"><code>ApplicationExitInfo</code></a>입니다. 종료 사유가 <code>REASON_OTHER</code>이면서 설명 문자열에 <em class="q">"MemoryLimiter:AnonSwap"</em>이 들어 있으면 한도로 종료된 세션입니다.</p>
+    <pre><span class="tab">MemoryLimiter 탐지 · ApplicationExitInfo</span><span class="k">val</span> am = <span class="f">getSystemService</span>(<span class="t">ActivityManager</span>::<span class="k">class</span>.java)
+<span class="k">for</span> (info <span class="k">in</span> am.<span class="f">getHistoricalProcessExitReasons</span>(packageName, <span class="n">0</span>, <span class="n">0</span>)) {
+    <span class="k">if</span> (info.reason == <span class="t">ApplicationExitInfo</span>.<span class="t">REASON_OTHER</span> &amp;&amp;
+        info.description?.<span class="f">contains</span>(<span class="s">"MemoryLimiter:AnonSwap"</span>) == <span class="k">true</span>) {
+        <span class="c">// 메모리 한도 초과로 종료됨 → 크래시 리포터에 기록</span>
+    }
+}</pre>
+    <p>탐지 수단은 종료 시점 기준으로 세 가지로 나뉩니다. 종료 <strong>직전</strong>에는 <code>ProfilingManager</code>가 힙 덤프를 자동 저장(<code>TRIGGER_TYPE_ANOMALY</code>)해 원인 분석용으로 남깁니다. 종료 <strong>후 다음 실행</strong>에서는 위의 <code>ApplicationExitInfo</code>로 리미터 종료를 확정합니다(종료 사유가 문자열로 명시되는 확정 신호). 그리고 <strong>예정</strong>으로 Play Console에 필드 메모리 지표를 노출하는 기능이 준비 중입니다.</p>
+    <figure class="fig"><img src="img/slide_memory_detection_timeline.png" alt="종료 시점 기준 탐지 수단 3가지" loading="lazy"><figcaption>종료 시점 기준 탐지 수단 3가지</figcaption></figure>
+    <pre><span class="tab">로컬 시뮬레이션 · adb</span><span class="c"># 메모리 한도를 조정/무시해서 동작을 시뮬레이션</span>
+adb shell am memory-limiter ignore &lt;uid|all|none&gt;</pre>
+    <div class="box tip">
+      <span class="lbl">방어 팁</span>
+      <p><code>onTrimMemory()</code>의 <code>TRIM_MEMORY_UI_HIDDEN</code>·<code>TRIM_MEMORY_BACKGROUND</code>에서 비트맵 캐시 등을 자진 반납하면 한도에 덜 걸립니다. 참고로 앱 메모리에서 가장 큰 객체는 대개 <strong>Bitmap</strong>입니다. 100KB짜리 압축 이미지도 디코딩되면 수 MB가 됩니다. Coil/Glide 사용, 뷰 크기에 맞는 다운샘플링, 투명이 불필요하면 <code>RGB_565</code>(ARGB_8888의 절반)로 줄이세요. 중복 비트맵은 Android Studio 힙 덤프의 ⚠️ 경고가 잡아줍니다.</p>
+    </div>
+    <figure class="fig"><img src="img/t2_dup_bitmaps.png" alt="Android Studio 힙 덤프에서 중복 비트맵을 표시하는 노란 ⚠️ 경고" loading="lazy"><figcaption>Android Studio Profiler 힙 덤프의 노란 ⚠️ 경고가 중복 비트맵을 잡아줍니다<br><span class="src">출처: <a href="https://developer.android.com/blog/posts/prioritizing-memory-efficiency-essential-steps-for-android-17">Prioritizing Memory Efficiency</a></span></figcaption></figure>
+
+    <h3>R8 Configuration Analyzer · keep 규칙만 정리해도</h3>
+    <p><strong>full R8(full mode)</strong>은 더 공격적인 최적화 모드입니다. 지금은 AGP 기본값이라, <code>android.enableR8.fullMode = false</code>를 지우면 켜집니다. 실제 사례로 디지털 뱅크 <strong>Monzo</strong>는 full R8을 켰을 때 이런 개선을 봤습니다.</p>
+    <div class="stats">
+      <div class="stat"><b>35%↓</b><span>ANR</span></div>
+      <div class="stat"><b>30%↑</b><span>콜드 스타트</span></div>
+      <div class="stat"><b>9%↓</b><span>앱 크기</span></div>
+    </div>
+    <p>이를 도와주는 게 <strong>R8 Configuration Analyzer</strong>입니다. 우리 코드의 몇 퍼센트가 최적화 대상인지 세 점수(Shrinking·Optimization·Obfuscation)로 보여주고, 어떤 keep 규칙이 최적화를 막는지 짚어줍니다. 명령 한 줄이면 HTML 리포트가 나옵니다.</p>
+    <pre>./gradlew :app:analyzeReleaseR8Config   <span class="c"># → HTML 리포트</span></pre>
+    <div class="box warn">
+      <span class="lbl">full mode 주의</span>
+      <p>공격적 최적화라 리플렉션이 자주 깨집니다(<code>ClassNotFoundException</code>, <code>NoSuchMethodException</code>). Signature 등 attribute가 보존되지 않아 Gson 역직렬화가 실패할 수 있고(Gson 2.11+는 자체 번들), no-arg 생성자가 유지되지 않아 <code>newInstance()</code>용 keep 규칙이 필요하며, 인라이닝을 위해 접근 제어자가 바뀔 수 있습니다. <strong>full mode를 켠 뒤엔 전체 회귀 테스트 + 라이브러리 최신화</strong>가 필수입니다.</p>
+    </div>
+
+    <div class="actions">
+      <h4>내일 할 일</h4>
+      <ol>
+        <li><code>./gradlew :app:analyzeReleaseR8Config</code>로 세 점수 baseline을 확보하고 팀 대시보드에 기록</li>
+        <li>크래시 리포터에 <code>"MemoryLimiter:AnonSwap"</code> 감지 로직 추가</li>
+        <li><code>adb shell am memory-limiter</code>로 Android 17 동작 미리 검증</li>
+        <li><code>r8-analyzer</code> 스킬을 붙여 keep 규칙 정리 · 단, AI 제안은 <em class="q">"will require technical verification"</em>, 반드시 검증 후 반영</li>
+      </ol>
+    </div>
+    <ul class="refs">
+      <li><a href="https://developer.android.com/blog/posts/prioritizing-memory-efficiency-essential-steps-for-android-17">Prioritizing memory efficiency (Android 17)</a></li>
+      <li><a href="https://developer.android.com/topic/performance/app-optimization/r8-configuration-analyzer">R8 Configuration Analyzer</a> · <a href="https://developer.android.com/topic/performance/app-optimization/full-mode">R8 full mode</a></li>
+      <li><a href="https://developer.android.com/blog/posts/monzo-boosts-performance-metrics-by-up-to-35-with-a-simple-r8-update">Monzo · R8 사례</a></li>
+    </ul>
+  </section>
+
+  <!-- ===================== TOPIC 3 ===================== -->
+  <section id="t3">
+    <span class="sec-tag">03 · AI &amp; 지능형 에이전트</span>
+    <h2 class="sec">Android는 이제 지능형 시스템</h2>
+    <div class="rule"></div>
+    <p>Google은 올해 <a href="https://developer.android.com/blog/posts/building-for-the-intelligence-system-on-android">The Android Show와 I/O</a>에서 Android가 <em class="q">"operating system에서 intelligence system으로"</em> 전환한다고 선언했습니다. 기기가 하드웨어와 소프트웨어를 묶어 사용자의 의도를 먼저 파악하고, 앱은 적절한 순간에 그 경험을 제공하는 역할을 맡는다는 구상입니다. 그 연장선에서 개발자에게 던진 문장이 <em class="q">"connect your app to the intelligence system"</em>입니다. 온디바이스 AI와 에이전트가 앱 기능을 직접 찾아 호출할 수 있도록, 앱을 그 지능형 시스템에 연결하라는 뜻이죠. 개발자 입장에서 핵심은 <strong>관점의 전환</strong>입니다.</p>
+    <p>지금까지는 사용자가 UI를 단계별로 직접 조작했습니다. 이제는 <strong>앱이 능력을 orchestratable tools로 노출</strong>합니다. 사용자는 자연어로 말하고, 에이전트가 앱 기능을 대신 호출합니다.</p>
+    <figure class="fig"><img src="img/slide_agentic_mindshift.png" alt="관점의 전환 · UI 직접 조작에서 tool 노출로" loading="lazy"><figcaption>관점의 전환 · UI 직접 조작에서 tool 노출로</figcaption></figure>
+
+    <h3>앱을 에이전트에 연결하는 두 경로</h3>
+    <p><strong>① App Functions</strong> · 우리가 직접 기능을 tool로 노출하는 능동적 방식. <strong>② Computer Control</strong> · 코드를 못 건드리는 앱을 위한 폴백으로, OEM 탑재 어시스턴트(삼성 빅스비, 구글 제미나이 등)가 화면을 대신 조작(UI 자동화)합니다. 공식 표현으로 <em class="q">"no code changes required"</em>. 접근성 시맨틱에 의존한다는 점이 포인트입니다.</p>
+    <figure class="fig"><img src="img/slide_agentic_two_paths.png" alt="에이전트에 연결하는 두 경로 · App Functions와 Computer Control" loading="lazy"><figcaption>에이전트에 연결하는 두 경로 · App Functions와 Computer Control</figcaption></figure>
+
+    <h3>App Functions · 우리 앱 기능이 Gemini의 tool이 된다</h3>
+    <p>한 줄로 요약하면 <strong>온디바이스 MCP</strong>입니다. 요즘 쓰는 MCP를 서버 대신 기기 안에서 로컬로 돌린다고 보면 됩니다. 흐름은 네 단계입니다: <strong>선언 → 스키마 생성 → 조회 → 실행</strong>. 앱이 기능을 선언하면 라이브러리가 스키마를 만들어 OS가 인덱싱하고, 에이전트가 그걸 조회해 적절한 함수를 실행합니다.</p>
+    <p>구현 자체는 단순합니다. 함수에 <code>@AppFunction</code> 애노테이션을 붙이고 KDoc으로 설명을 달면, 그 <strong>KDoc이 곧 에이전트가 읽는 tool 설명</strong>이 됩니다. 다만 Gemini 연동은 아직 프리뷰 단계입니다.</p>
+
+    <h3>온디바이스: Gemini Nano 4</h3>
+    <p>지능을 기기 안에서 직접 돌리는 모델이 <strong>Gemini Nano 4</strong>입니다. 베이스는 오픈 모델 <strong>Gemma 4</strong>. 수치가 확실합니다.</p>
+    <div class="stats">
+      <div class="stat"><b>4×</b><span>up to 4x faster</span></div>
+      <div class="stat"><b>60%↓</b><span>up to 60% less battery</span></div>
+    </div>
+    <p>단, <strong>12GB RAM</strong>이 필요해 대상 기기는 아직 제한적입니다. 지금은 <strong>AICore Developer Preview</strong>로 미리 써볼 수 있고, Structured Output이나 Prefix Caching 같은 개발 편의 기능도 붙었습니다. 프리뷰로 준비해두는 단계라고 보면 됩니다.</p>
+
+    <div class="actions">
+      <h4>내일 할 일</h4>
+      <ol>
+        <li>에이전트에 노출할 기능을 <strong>도메인 단위로 목록화</strong> · Clean Architecture로 유스케이스를 잘 쪼갠 팀은 준비가 절반은 끝난 셈. 애노테이션 + KDoc만 얹으면 AppFunction 후보</li>
+        <li><strong>접근성 시맨틱 정비</strong> · Computer Control이 여기에 의존하므로, 접근성 라벨을 지금 정비해 두면 이후 자동화 대응이 수월해짐</li>
+      </ol>
+    </div>
+    <ul class="refs">
+      <li><a href="https://developer.android.com/ai">AI on Android</a> · <a href="https://developer.android.com/ai/appfunctions">App Functions</a> · <a href="https://developer.android.com/ai/computer-control">Computer Control</a></li>
+      <li><a href="https://developer.android.com/ai/gemini-nano">Gemini Nano</a> · <a href="https://developer.android.com/blog/posts/gemma-4-the-new-standard-for-local-agentic-intelligence-on-android">Gemma 4 (성능 수치)</a></li>
+    </ul>
+  </section>
+
+  <!-- ===================== TOPIC 4 ===================== -->
+  <section id="t4">
+    <span class="sec-tag">04 · 프라이버시 &amp; 보안</span>
+    <h2 class="sec">권한을 요청하지 말고, 고른 것만 받는다</h2>
+    <div class="rule"></div>
+    <p>큰 흐름은 하나입니다. <strong>전체 접근 권한을 받지 말고, 사용자가 고른 것만 시스템 선택기로 받아라.</strong> 지금까지는 사진·연락처를 쓰려면 런타임 권한 팝업을 띄우고 전체 접근을 받는 게 당연했지만, 이제는 시스템 선택기로 <strong>고른 항목만</strong> 앱에 넘어옵니다. 권한 자체가 사라지는 방향입니다.</p>
+    <figure class="fig"><img src="img/slide_permission_vs_picker.png" alt="권한 팝업 대신 시스템 선택기" loading="lazy"><figcaption>권한 팝업 대신 시스템 선택기</figcaption></figure>
+
+    <h3><span class="pill red">필수</span> Android 17 타깃 전에 반드시</h3>
+    <p><strong>Contact Picker</strong> · 이번 I/O 2026, Android 17에서 새로 나온 표준 연락처 선택 UI입니다. Photo Picker가 미디어에서 하던 걸 연락처에서 하는 것. 여기에 <strong>2026.04 새 Contact Permissions 정책</strong>이 붙어서, Android 17 타깃 시 <strong>Picker로 해결되는 기능엔 <code>READ_CONTACTS</code>를 못 씁니다.</strong> 대응은 세 단계입니다.</p>
+    <ol>
+      <li>연락처 쓰는 기능을 모두 목록화</li>
+      <li>"연락처 하나 골라 공유·초대" 유형 → Contact Picker로 대체(권한 제거)</li>
+      <li>Picker로 핵심 기능을 제공하기 충분치 않은 경우에만 <code>READ_CONTACTS</code> 유지 + Play Console 사유 선언</li>
+    </ol>
+    <figure class="fig"><img src="img/t4_contact_picker_modes.png" alt="Android 17 Contact Picker의 선택 모드" loading="lazy"><figcaption>Android 17 Contact Picker의 세 가지 선택 모드 · 단일 연락처, 다중 연락처, 다중 전화번호<br><span class="src">출처: <a href="https://developer.android.com/about/versions/17/features/contact-picker">Android 17 · Contact picker</a></span></figcaption></figure>
+
+    <p><strong>SMS OTP</strong> · 이제 앱이 수신 대상이 아닌 일반 SMS의 OTP는 <a href="https://developer.android.com/about/versions/17/behavior-changes-17"><strong>수신 후 3시간 동안</strong></a> 앱에서 못 읽습니다. 가입·로그인 인증 자동입력이 여기 걸립니다. 3시간 지연을 피하려면 다음 두 방식 중 하나로 전환하면 됩니다.</p>
+    <ul>
+      <li><strong><a href="https://developer.android.com/identity/sms-retriever">SMS Retriever</a></strong> · <strong>완전 자동</strong>입니다. 서버가 보내는 OTP 문자 안에 앱을 식별하는 고유 문자열(앱 해시)을 넣어 두면, Play 서비스가 그 문자만 골라 앱에 바로 넘겨줍니다. SMS 권한도, 사용자 확인도 필요 없습니다. 대신 문자 형식을 이 규칙에 맞춰야 하고, 문자를 만드는 서버 쪽 작업이 따라옵니다.</li>
+      <li><strong>SMS User Consent</strong> · <strong>한 번의 동의</strong>가 필요합니다. 문자 형식을 바꾸기 어려울 때 쓰는 방식으로, <em class="q">"이 문자를 앱에서 읽도록 허용할까요?"</em> 같은 시스템 다이얼로그가 한 번 뜨고 사용자가 허용하면 그 메시지 하나만 앱에 전달됩니다. 문자 형식 제약이 없어 기존 OTP 문자를 그대로 쓸 수 있습니다.</li>
+    </ul>
+    <p class="tsrc">출처: <a href="https://developer.android.com/about/versions/17/behavior-changes-17">Behavior changes · Apps targeting Android 17</a> · <a href="https://developer.android.com/identity/sms-retriever">SMS Retriever API</a></p>
+
+    <p><strong>BAL 하드닝</strong> · Background Activity Launch, 백그라운드 앱이 사용자가 아무것도 안 했는데 갑자기 화면을 띄우는 동작으로, 피싱·화면 가로채기에 악용되던 것입니다. Android 17이 이를 조입니다.</p>
+    <ul>
+      <li>기존 "무조건 허용" 상수는 삭제되지는 않고 <strong>deprecated</strong> 처리됩니다. 상수 자체는 남아 있습니다.</li>
+      <li>대응은 <code>PendingIntent</code>를 send할 때 넘기는 <code>ActivityOptions</code> 모드를 권장값으로 바꾸는 것입니다. <code>ALLOW_IF_VISIBLE</code>를 주면 호출한 앱이 화면에 보일 때만 백그라운드 실행이 허용됩니다(아래 코드).</li>
+      <li>정말 무조건 허용이 필요하면 <code>ALLOW_ALWAYS</code> 모드도 있지만, 기본은 <code>ALLOW_IF_VISIBLE</code>를 권장합니다.</li>
+      <li>푸시를 눌렀을 때 특정 화면을 띄우는 로직 등이 여기 걸릴 수 있어 점검이 필요합니다.</li>
+    </ul>
+    <pre><span class="tab">BAL 대응</span><span class="c">// setPendingIntentBackgroundActivityStartMode : API 34+</span>
+<span class="c">// MODE_..._ALLOW_IF_VISIBLE : SDK 36(Android 16)+</span>
+<span class="k">val</span> options = <span class="t">ActivityOptions</span>.<span class="f">makeBasic</span>()
+    .<span class="f">setPendingIntentBackgroundActivityStartMode</span>(
+        <span class="c">// 예전: MODE_BACKGROUND_ACTIVITY_START_ALLOWED (deprecated)</span>
+        <span class="c">// 권장: 호출 앱이 화면에 보일 때만 허용</span>
+        <span class="t">ActivityOptions</span>.<span class="t">MODE_BACKGROUND_ACTIVITY_START_ALLOW_IF_VISIBLE</span>
+    )
+<span class="c">// 푸시 눌렀을 때 특정 화면 띄우는 로직 등이 여기 걸릴 수 있어 점검 필요</span></pre>
+
+    <h3><span class="pill yellow">조건부</span> 해당되는 앱만</h3>
+    <ul>
+      <li><strong>Local network</strong> · Android 17(SDK 37) 타깃 앱은 로컬 네트워크 접근이 <strong>기본 차단</strong>됩니다. 캐스팅·스마트홈처럼 LAN 기기와 넓게·지속적으로 통신해야 하면 새 <code>ACCESS_LOCAL_NETWORK</code> 런타임 권한을 요청하세요(<code>NEARBY_DEVICES</code> 권한 그룹). 일회성 검색·연결이면 권한 대신 프라이버시 보존 picker를 쓰는 편이 좋습니다.</li>
+      <li><strong>인증서 투명성(CT)</strong> · TLS 인증서를 공개 로그에 등록·검증해 위조를 차단하는 장치가 Android 17부터 <strong>기본 활성화</strong>됩니다. 공개 인증기관 인증서는 대부분 문제없지만, 사내 자체 인증서나 피닝을 쓰면 공개 로그에 없어 연결이 끊길 수 있습니다. 그런 경우 Network Security Configuration에서 전역 또는 도메인별로 opt-out 하세요.</li>
+    </ul>
+    <p class="tsrc">출처: <a href="https://developer.android.com/privacy-and-security/local-network-permission">Local network permission</a> · <a href="https://developer.android.com/privacy-and-security/security-config">Network security configuration</a> · <a href="https://developer.android.com/about/versions/17/behavior-changes-17">Behavior changes · Apps targeting Android 17</a></p>
+
+    <h3><span class="pill green">개선</span> 여유 있을 때</h3>
+    <p><strong><a href="https://developer.android.com/training/data-storage/shared/photo-picker/embedded">Embedded Photo Picker</a></strong> · 앱이 사진 권한을 아예 안 받아도 사용자가 고른 것만 넘어옵니다. 게다가 기존 권한은 로컬 파일만 봤지만 이건 <strong>Google Photos 같은 클라우드 라이브러리까지</strong> 접근합니다. 이 무권한·클라우드 접근은 <a href="https://developer.android.com/training/data-storage/shared/photo-picker">기본(시스템) Photo Picker</a>가 원래 제공하던 특징입니다.</p>
+    <figure class="fig"><img src="img/photo_picker_basic.gif" alt="시스템 Photo Picker · 권한 없이 고른 사진만 앱에 전달" loading="lazy"><figcaption>기본 Photo Picker · 권한 없이 사용자가 고른 사진만 앱에 전달<br><span class="src">출처: <a href="https://developer.android.com/training/data-storage/shared/photo-picker">Photo picker (Android Developers)</a></span></figcaption></figure>
+    <p>다만 기본 피커는 앱 위에 <strong>별도 모달</strong>로 떠서 화면이 전환되고, 그리드 디자인은 앱이 손댈 수 없습니다. <strong>Embedded Photo Picker</strong>는 그 피커를 <strong>앱 화면 안에 직접 심어</strong>, 화면 전환 없이 인앱에서 고르게 합니다. 무권한이라는 안전성은 그대로 두면서, 배치·높이·강조색·최대 선택 개수 같은 외형 일부를 앱이 제어할 수 있게 열어 주는 것이 핵심입니다. 그럼 어디까지 바꿀 수 있을까요. 커스터마이징 정도를 <strong>스펙트럼</strong>으로 정리하면 이렇습니다.</p>
+    <figure class="fig"><img src="img/photo_picker_embedded.gif" alt="Embedded Photo Picker · 앱 화면 안에 임베드되어 연속으로 사진을 선택" loading="lazy"><figcaption>Embedded Photo Picker · 앱 화면 안에 임베드되어 화면 전환 없이 연속 선택(위 기본 피커의 별도 모달과 비교)<br><span class="src">출처: <a href="https://developer.android.com/training/data-storage/shared/photo-picker/embedded">Embedded photo picker (Android Developers)</a></span></figcaption></figure>
+    <ul>
+      <li><strong>시스템 피커</strong> · 권한 없음, 커스텀 최소(그냥 띄우고 결과만 받음)</li>
+      <li><strong>Embedded 피커 (권장)</strong> · 권한 없이도 <strong>앱 화면 안에 직접</strong> 임베드해, 화면 전환 없이 인앱에서 사진을 고릅니다. 렌더링이 <strong>SurfaceView 기반</strong>이라 그리드 내부 픽셀은 앱이 손대지 못하는 보안 영역(<em class="q">"광고 배너처럼 전용 영역으로 취급"</em>)이고, 그 덕에 권한이 필요 없습니다. 대표 강점은 <strong>연속 선택(Continuous)</strong> · 피커를 닫지 않고 계속 선택·해제하며 앱 UI 상태와 실시간 동기화됩니다. 배치·높이(<code>Modifier.height(500.dp)</code> 등)·<strong>강조색</strong>·최대 선택 개수·사전 선택 URI·MIME 타입 필터는 <code>FeatureInfo</code>로 조절하고(강조색 기본값은 시스템 다이내믹 컬러), 선택 썸네일은 내 UI로 그립니다. Android 14(API 34) + SDK Extensions 15 이상에서 동작하며, 미충족 기기는 Play 서비스로 백포트됩니다. Compose는 <code>EmbeddedPhotoPicker</code> 컴포저블, View는 <code>EmbeddedPhotoPickerView</code>를 씁니다.</li>
+      <li><strong>Partial 권한 + 커스텀 갤러리</strong> · <code>READ_MEDIA_VISUAL_USER_SELECTED</code>로 UI 100% 자유. 대신 권한 팝업이 부활하고 Play 정책 정당화 필요. 그리드까지 완전히 바꿔야 할 때만.</li>
+    </ul>
+    <pre><span class="tab">Embedded Photo Picker · Compose</span><span class="k">val</span> pickerState = <span class="f">rememberEmbeddedPhotoPickerState</span>()
+<span class="t">EmbeddedPhotoPicker</span>(
+    state = pickerState,
+    embeddedPhotoPickerFeatureInfo =
+        <span class="t">EmbeddedPhotoPickerFeatureInfo</span>.<span class="t">Builder</span>().<span class="f">setAccentColor</span>(0xFF0000).<span class="f">build</span>(),
+    onUriPermissionGranted = { uris -&gt; _attachments.value += uris },
+    onUriPermissionRevoked = { uris -&gt; _attachments.value -= uris },
+    onSelectionComplete = { /* 선택 완료 → 피커 숨김 */ },
+)</pre>
+
+    <figure class="fig"><img src="img/slide_photopicker_spectrum.png" alt="사진 선택 커스텀 스펙트럼 · 시스템 · Embedded(권장) · Partial" loading="lazy"><figcaption>사진 선택 커스텀 스펙트럼 · 시스템 · Embedded(권장) · Partial<br><span class="src">출처: <a href="https://developer.android.com/training/data-storage/shared/photo-picker/embedded">Embedded Photo Picker</a>, <a href="https://developer.android.com/blog/posts/the-embedded-photo-picker">The Embedded Photo Picker (blog)</a></span></figcaption></figure>
+    <p><strong>Credential Manager</strong> · 비밀번호·패스키·소셜 로그인을 하나의 API로 묶습니다. 주목할 건 <strong>conditional create</strong>. 기존 비밀번호로 로그인한 유저에게, 로그인 흐름을 방해하지 않고 <strong>일반 bottom sheet UI 없이</strong> 조용히 패스키를 만들어두고 사용자에겐 알림으로 알립니다. 유저를 귀찮게 하지 않고 패스키로 넘길 수 있어, 전환율 손실 없이 로그인을 점진적으로 강화할 수 있습니다.</p>
+    <figure class="fig"><img src="img/t4_credman_ui.png" alt="Credential Manager 통합 로그인 UI (Figure 1)" loading="lazy"><figcaption>Credential Manager 통합 로그인 UI (Figure 1) <span class="src">· 출처: Android Developers</span></figcaption></figure>
+
+    <div class="box must">
+      <span class="lbl">우선순위 · 우리 앱에 해당하는 🔴부터</span>
+      <p><span class="pill red">필수</span> Contact Picker · SMS OTP · BAL 모드</p>
+      <p><span class="pill yellow">조건부</span> Local network · CT</p>
+      <p><span class="pill green">개선</span> Photo Picker · Credential Manager</p>
+      <p><strong>시한</strong> · Play 타깃 API 상향은 보통 매년 <strong>8월 31일</strong>입니다(연장 신청 시 11월 1일). 2026년 8월 31일 시한은 Android 16(API 36)이고, 여기 정리한 Android 17(API 37) 대응 시한은 아직 공식 발표 전입니다. 관례대로면 2027년 8월 31일 무렵으로 예상되니, <a href="https://developer.android.com/google/play/requirements/target-sdk">Play 타깃 API 요구사항</a> 공지를 확인하세요.</p>
+    </div>
+    <ul class="refs">
+      <li><a href="https://developer.android.com/training/data-storage/shared/photo-picker/embedded?hl=ko">삽입된 사진 선택 도구</a></li>
+      <li><a href="https://developer.android.com/identity/sign-in/credential-manager">Credential Manager</a> · <a href="https://developer.android.com/jetpack/androidx/releases/credentials">credentials 릴리스 노트 (conditional create)</a></li>
+      <li><a href="https://developers.google.com/identity/sms-retriever/overview">SMS Retriever · User Consent</a></li>
+    </ul>
+  </section>
+
+  <!-- ===================== TOPIC 5 ===================== -->
+  <section id="t5">
+    <span class="sec-tag">05 · 미디어 &amp; 시스템 통합</span>
+    <h2 class="sec">Media3로 표준화 · 파편화 복잡성을 걷어낸다</h2>
+    <div class="rule"></div>
+    <p>공식 문서는 <a href="https://developer.android.com/media/media3">Jetpack Media3</a>를 <em class="q">"the new home for media libraries"</em>로 소개하며, 기기 파편화에서 오는 복잡성을 걷어내는(<em class="q">"abstract away the complexity that comes with fragmentation"</em>) 표준 스택으로 규정합니다. Android 17은 이 미디어 쪽을 프로덕션급 툴킷으로 정리했습니다. 크게 두 축입니다. 하나는 <strong>미디어 도구의 확장</strong>(캡처는 CameraX, 후처리·재생은 Media3), 다른 하나는 <strong>백그라운드 오디오 제약 강화</strong>입니다.</p>
+
+    <h3>하나의 연결된 파이프라인</h3>
+    <p>예전엔 촬영·편집·재생·캐스팅을 각각 다른 API로 엮어야 했는데, 이제 하나의 파이프라인이 됐습니다. 촬영은 <strong>CameraX</strong>(저조도는 <code>Low Light Boost</code>로 실시간 보정, <code>CameraXViewfinder</code>), 후처리는 <strong>Media3 AI Effects</strong>(Enhance · Magic Eraser · Studio Sound), 재생은 <strong>ExoPlayer</strong>(PreloadManager · Scrubbing).</p>
+    <figure class="fig"><img src="img/t5_low_light_boost.webp" alt="Low Light Boost 적용 전후 · 실시간 카메라 프리뷰 밝기 보정" loading="lazy"><figcaption>CameraX Low Light Boost · 저조도 실시간 프리뷰 밝기 보정 (Instagram, Pixel 10 Pro)<br><span class="src">출처: <a href="https://developer.android.com/blog/posts/brighten-your-real-time-camera-feeds-with-low-light-boost">Brighten Your Real-Time Camera Feeds with Low Light Boost</a></span></figcaption></figure>
+
+    <h3>Media3 PreloadManager · 넘기는 순간 지연 없음</h3>
+    <p>숏폼 피드나 캐러셀처럼 영상을 연속으로 넘겨 보는 서비스에 제일 와닿는 기능입니다. 다음 영상으로 넘어갈 때마다 로딩을 기다리면 경험이 나빠지고, 그렇다고 모든 후보를 미리 다 받아 두면 데이터와 배터리를 낭비합니다. <a href="https://developer.android.com/media/media3/exoplayer/preloading-media/preloadmanager"><code>DefaultPreloadManager</code></a>는 이 둘 사이의 균형을 잡아 주는 도구입니다.</p>
+    <p>핵심은 <strong>역할 분담</strong>입니다. <strong>앱</strong>은 각 영상이 피드에서 몇 번째인지(<code>index</code>), 지금 재생 중인 게 무엇인지(<code>setCurrentPlayingIndex</code>), 그리고 영상마다 <strong>얼마나</strong> 미리 받아 둘지를 알려 줍니다. <strong>매니저</strong>는 그 정보를 받아 <strong>어떤 순서로</strong> 로드할지를 정하는데, 지금 재생 중인 영상에 가까운 것부터 우선 준비합니다. 실제 흐름은 이렇습니다.</p>
+    <ol>
+      <li><strong>얼마나 받을지 정하는 기준을 만든다</strong> · <code>TargetPreloadStatusControl</code>을 구현합니다. 매니저는 영상마다 이걸 물어봐서 <em class="q">"N초 분량까지"</em>, <em class="q">"메타데이터만"</em>, <em class="q">"지금은 받지 않음"</em> 중 하나를 답으로 받습니다.</li>
+      <li><strong>매니저와 플레이어를 같은 빌더로 만든다</strong> · <code>DefaultPreloadManager.Builder</code>로 매니저를 만들고, <strong>같은 빌더</strong>로 <code>ExoPlayer</code>도 만듭니다. 나중에 꺼낸 <code>MediaSource</code>는 반드시 이 빌더가 만든 플레이어에서만 재생할 수 있습니다.</li>
+      <li><strong>후보 영상을 등록한다</strong> · 피드의 첫 몇 개를 위치 <code>index</code>와 함께 매니저에 추가합니다. 유저가 스크롤하면 그때그때 추가·제거합니다.</li>
+      <li><strong><code>invalidate()</code>로 우선순위를 다시 계산시킨다</strong> · 등록 직후, 그리고 재생 대상이 바뀌거나 목록이 바뀔 때마다 호출합니다. 그러면 매니저가 우선순위를 다시 매기고, 기준에 맞는 만큼 백그라운드로 프리로드를 시작합니다.</li>
+      <li><strong>재생할 땐 준비된 걸 꺼내 쓴다</strong> · 유저가 영상을 재생하면 매니저에서 그 영상의 <code>MediaSource</code>를 요청합니다. 새로 만드는 게 없으니, 이미 받아 둔 만큼은 곧바로 재생됩니다. 다른 영상으로 넘어가면 현재 <code>index</code>를 갱신하고 다시 <code>invalidate()</code>를 부릅니다.</li>
+      <li><strong>다 쓰면 정리한다</strong> · 피드를 닫을 때 <code>release()</code>로 자원을 반납합니다.</li>
+    </ol>
+    <p>정리하면 <strong>얼마나</strong>는 앱이, <strong>어떤 순서로</strong>는 매니저가 정하는 구조입니다. 덕분에 재생 중인 영상 주변만 알맞게 미리 준비되어, 사용자가 넘기는 순간의 지연이 사라집니다. Facebook·Instagram이 도입해 재생 시작 지연과 버퍼링을 줄이고 시청 시간·인게이지먼트를 올렸는데, 프리로드 전략은 UI마다 다릅니다. Facebook은 현재 영상만, Instagram Reels는 앞뒤 인접 영상까지 미리 준비했습니다.</p>
+    <p class="tsrc">출처: <a href="https://developer.android.com/media/media3/exoplayer/preloading-media/preloadmanager/concepts">Preload manager concepts</a> · <a href="https://developer.android.com/media/media3/exoplayer/preloading-media/preloadmanager">Preloading media overview</a> · <a href="https://developer.android.com/blog/posts/instagram-and-facebook-deliver-instant-playback-and-boost-user-engagement-with-media3-preload-manager">Instagram·Facebook 사례 (blog)</a></p>
+    <figure class="fig"><img src="img/t5_preload_before_after.webp" alt="Instagram PreloadManager 적용 전후 재생 비교" loading="lazy"><figcaption>Instagram PreloadManager 적용 전후 · 넘길 때 즉시 재생 비교<br><span class="src">출처: <a href="https://developer.android.com/blog/posts/instagram-and-facebook-deliver-instant-playback-and-boost-user-engagement-with-media3-preload-manager">Instagram·Facebook Media3 PreloadManager 사례</a></span></figcaption></figure>
+    <div class="box note">
+      <span class="lbl">그 외 Media3 · 알아 두면 좋은 것들</span>
+      <ul>
+        <li><strong><code>CameraXViewfinder</code></strong> · 카메라 프리뷰를 그리는 Compose 컴포저블입니다. 폴더블·태블릿처럼 화면 비율이 제각각인 기기에서 스케일링과 반응형 배치를 알아서 처리해, 프리뷰가 기기마다 어긋나거나 늘어나는 문제를 줄여 줍니다.</li>
+        <li><strong><code>CodecDB</code></strong> (Android 17 신규) · 기기 칩셋별로 최적의 인코딩 설정을 추천해 줍니다. 같은 영상을 내보내도(export) 기기마다 품질과 성능이 들쭉날쭉하던 편차를 줄이는 것이 목적입니다.</li>
+        <li><strong>ExoPlayer Scrubbing Mode</strong> · 시크바 핸들을 잡고 빠르게 드래그하는 것처럼 짧은 시간에 seek가 반복되는 상황을 매끄럽게 처리하도록 최적화한 모드입니다. <code>ExoPlayer.setScrubbingModeEnabled(true)</code>로 켜고, <code>setScrubbingModeParameters(...)</code>로 동작을 조정합니다.</li>
+        <li><strong><code>Transformer</code> · <code>CastPlayer</code></strong> · Transformer는 여러 클립을 이어 붙이는 멀티 애셋 편집과 후처리를, CastPlayer는 Chromecast 같은 외부 기기로 끊김 없이 재생을 넘기는 캐스팅을 담당합니다.</li>
+      </ul>
+      <p class="tsrc">출처: <a href="https://developer.android.com/blog/posts/17-things-to-know-for-android-developers-at-google-i-o">17 Things to know (Google I/O '26)</a> · <a href="https://developer.android.com/reference/kotlin/androidx/media3/exoplayer/ScrubbingModeParameters.Builder">ScrubbingModeParameters</a> · <a href="https://developer.android.com/media/media3/transformer">Media3 Transformer</a></p>
+    </div>
+
+    <h3>백그라운드 오디오 하드닝, 그리고 방어</h3>
+    <p>Android 17부터 오디오 프레임워크가 백그라운드에서의 <strong>오디오 재생·오디오 포커스 요청·볼륨 변경</strong>을 제한합니다. 사용자가 의도한 동작만 허용한다는 취지입니다. 규칙은 두 가지입니다. Android 17에서 도는 <strong>모든 앱</strong>은 이런 백그라운드 오디오를 하려면 화면에 보이는 액티비티가 있거나, <code>SHORT_SERVICE</code>가 아닌 포그라운드 서비스를 돌리고 있어야 합니다. 여기에 <strong>Android 17(API 37)을 타깃</strong>하는 앱은 조건이 하나 더 붙는데, 백그라운드 상태라면 그 포그라운드 서비스가 <strong>while-in-use(WIU)</strong> 권한을 가져야 합니다. WIU는 유저가 시작했거나 앱이 보이는 동안 띄운 FGS에만 부여됩니다. <span class="pill yellow">예외</span> <code>USAGE_ALARM</code> 스트림을 다루고 exact alarm 권한이 있으면 이 WIU 요건은 면제됩니다.</p>
+    <p>주의할 점은 <strong>조용히 실패한다</strong>는 것입니다. 조건을 못 갖춘 채 재생·볼륨 API를 부르면 예외도 실패 메시지도 없이 무시되고, 오디오 포커스 요청만 <code>AUDIOFOCUS_REQUEST_FAILED</code>를 돌려줍니다. 이 제한은 <em class="q">"멈췄다가 몇 시간 뒤 갑자기 재생"</em>되거나, 재생 세션·포커스가 액티비티와 분리된 채 새어 나가는 버그성 동작을 막기 위한 것입니다. 화면에 보일 때만(PiP 포함) 재생하는 앱이나 VOIP 앱은 영향이 없고, 음악·팟캐스트처럼 <strong>화면이 꺼진 뒤에도 재생을 이어 가는</strong> 앱이 대상입니다.</p>
+    <p>해결책은 간단합니다. 백그라운드 재생을 Media3의 <strong><code>MediaSessionService</code></strong>에 맡기면 됩니다. 이점은 이렇습니다.</p>
+    <ul>
+      <li><strong>생명주기 자동 관리</strong> · 포그라운드 서비스와 미디어 세션의 시작·종료를 라이브러리가 대신 처리해, 백그라운드 오디오 하드닝 영향을 거의 받지 않습니다.</li>
+      <li><strong>액티비티와 분리된 안정적 재생</strong> · 세션과 플레이어를 액티비티 밖 별도 서비스에서 들고 있어, 화면이 꺼지거나 앱이 전환돼도 재생 세션이 새거나 끊기지 않습니다.</li>
+      <li><strong>시스템·외부 컨트롤러 자동 연동</strong> · 잠금화면·알림의 미디어 컨트롤, Android Auto, Wear OS, Google Assistant 같은 외부 클라이언트가 <code>MediaController</code>로 붙어 재생을 제어합니다.</li>
+      <li><strong>미디어 알림·정책 대응 흡수</strong> · 재생 상태에 맞는 알림을 라이브러리가 만들어 주고, 플랫폼 정책 변화도 업데이트로 따라가 유지보수 부담이 줄어듭니다.</li>
+    </ul>
+    <p>직접 구현한다면 재생이 시작될 때 앱이 포그라운드인 상태에서 <code>mediaPlayback</code> FGS를 띄워 WIU를 확보하고, 버퍼링 같은 10분 미만의 일시적 중단에는 FGS를 유지하며, 재생이 끝나면 FGS와 미디어 세션을 정리한 뒤 유저가 명시적으로 재개할 때만 다시 시작하는 것이 권장 패턴입니다.</p>
+    <pre><span class="tab">MediaSessionService</span><span class="k">class</span> <span class="t">PlaybackService</span> : <span class="t">MediaSessionService</span>() {
+    <span class="k">private</span> <span class="k">var</span> session: <span class="t">MediaSession</span>? = <span class="k">null</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="f">onCreate</span>() {
+        <span class="k">super</span>.<span class="f">onCreate</span>()
+        <span class="k">val</span> player = <span class="t">ExoPlayer</span>.<span class="t">Builder</span>(<span class="k">this</span>).<span class="f">build</span>()
+        session = <span class="t">MediaSession</span>.<span class="t">Builder</span>(<span class="k">this</span>, player).<span class="f">build</span>()
+    }
+    <span class="k">override</span> <span class="k">fun</span> <span class="f">onGetSession</span>(info: <span class="t">MediaSession</span>.<span class="t">ControllerInfo</span>) = session
+    <span class="k">override</span> <span class="k">fun</span> <span class="f">onDestroy</span>() {
+        session?.run { player.<span class="f">release</span>(); <span class="f">release</span>() }; session = <span class="k">null</span>
+        <span class="k">super</span>.<span class="f">onDestroy</span>()
+    }
+}</pre>
+    <p class="tsrc">출처: <a href="https://developer.android.com/about/versions/17/changes/bg-audio">Background audio hardening (Android 17)</a> · <a href="https://developer.android.com/media/media3/session/background-playback">Background playback with a MediaSessionService</a></p>
+    <div class="box tip">
+      <span class="lbl">정리</span>
+      <p>이 절을 하나로 묶으면, 재생 스택을 <strong>Media3(ExoPlayer)로 표준화</strong>하라는 것입니다. PreloadManager나 Scrubbing 같은 최신 기능이 같은 API 안에 있고, 백그라운드 오디오 하드닝 대응도 <code>MediaSessionService</code>가 맡아 주기 때문에, 기능 개선과 정책 대응을 따로 챙기지 않아도 됩니다.</p>
+    </div>
+    <ul class="refs">
+      <li><a href="https://developer.android.com/media/media3/exoplayer">ExoPlayer · PreloadManager</a> · <a href="https://developer.android.com/media/media3/transformer">Transformer</a> · <a href="https://developer.android.com/media/media3/cast">CastPlayer</a></li>
+      <li><a href="https://developer.android.com/about/versions/17/changes/bg-audio">백그라운드 오디오 변경</a></li>
+    </ul>
+  </section>
+
+  <!-- ===================== TOPIC 6 ===================== -->
+  <section id="t6">
+    <span class="sec-tag">06 · 멀티 디바이스 생태계</span>
+    <h2 class="sec">Adaptive by Default</h2>
+    <div class="rule"></div>
+    <p><strong>Adaptive by Default</strong>는 <em class="q">"UI를 화면에 맞게 적응시키라"</em>는 권고를 넘어, <strong>플랫폼이 이미 그렇게 동작하기 시작했다</strong>는 뜻입니다. 대화면에서는 시스템이 앱을 창 크기에 맞춰 리사이즈하고, 앱이 걸어 둔 방향·화면비·리사이즈 제한을 무시합니다. 개발자가 준비했든 안 했든 앱은 리사이즈되므로, 적응형 UI는 선택적 개선을 넘어 이제는 기본으로 챙겨야 하는 대상이 됐습니다(<a href="https://developer.android.com/blog/posts/goodbye-mobile-only-hello-adaptive">Goodbye Mobile Only, Hello Adaptive</a>).</p>
+    <p>목표는 하나의 코드베이스가 <strong>폰·폴더블·태블릿·Googlebook(랩톱)·차·XR</strong>까지 자연스럽게 확장되는 것입니다. 대상은 이미 580M대가 넘는 대화면 기기이고, 적응형 앱은 Play에서도 더 잘 노출됩니다. 실무적으로 보면 <strong>대화면</strong>은 Android 17 타깃과 함께 리사이즈가 강제되니 지금 대응이 필요하고, <strong>Wear OS 7</strong>은 Android 17 기반으로 하반기 정식 출시라 개발만 미리 시작하면 되며, <strong>Android XR</strong>은 아직 Developer Preview 단계여서 프로덕션 도입은 이릅니다.</p>
+
+    <h3>대화면 · 왜 지금인가</h3>
+    <p>삼성 갤럭시 폴드 8처럼 펼치면 넓은 화면이 되는 폼팩터가 이제 특수한 기기를 넘어 상시 들고 다니는 디바이스의 한 형태로 자리 잡았습니다. 특히 <strong>펼친 상태의 가로 모드</strong>는 폰용 세로 고정 레이아웃으로는 감당이 안 됩니다. 회전하면 UI가 늘어나거나 잘리고, 상태가 날아가기도 합니다. 우리 앱이 대응해야 하는 실제 사용 형태가 된 것입니다.</p>
+    <p>규모도 근거가 됩니다. 대화면 기기는 이미 <strong>580M대</strong>를 넘었고, Google 내부 데이터 기준 폰과 태블릿을 함께 쓰는 유저는 폰만 쓰는 유저보다 약 <strong>9배</strong>, 폴더블 유저는 최대 <strong>14배</strong>를 지출합니다. 여기에 Google Play는 adaptive 품질 기준을 충족한 앱에 <strong>"Optimized for large screens"</strong> 배지를 달아, 검색·추천에서 노출이 유리해집니다.</p>
+    <figure class="fig"><img src="img/t6_large_screen_badge.png" alt="Google Play 대화면 배지와 기기별 평점 (Phone·Tablet·Chromebook)" loading="lazy"><figcaption>Google Play의 대화면 최적화 배지와 기기별 평점 · Phone·Tablet·Chromebook 각각 표시<br><span class="src">출처: Android Developers</span></figcaption></figure>
+    <p>그럼 실제로 어떻게 적응시킬까요. Compose가 제공하는 도구는 이렇습니다.</p>
+    <ul>
+      <li><strong>Window size class로 레이아웃 분기</strong> · 앱이 현재 창 크기 등급(Compact·Medium·Expanded)을 읽어 레이아웃을 바꿉니다. 폰 같은 좁은 화면에서는 한 화면만 보여주고, 태블릿처럼 넓은 화면에서는 목록과 상세를 나란히 두는 식입니다.</li>
+      <li><strong>I/O '26 신규 적응형 레이아웃 API</strong> · <code>Grid</code>·<code>FlexBox</code>는 창 크기에 따라 항목을 자동으로 재배치하는 레이아웃이고, <code>MediaQuery</code> API는 CSS의 미디어 쿼리처럼 화면 조건별로 UI를 분기합니다. <strong>Navigation 3</strong>의 Scene Decorators는 상단 앱바나 내비게이션 레일 같은 공통 UI를 화면(scene) 단위로 얹을 수 있게 해줍니다.</li>
+      <li><strong>화면 크기와 함께 입력도 달라진다</strong> · 놓치기 쉬운 부분입니다. 대화면에서는 마우스·트랙패드·키보드 입력이 늘어납니다. Compose 1.11이 트랙패드를 마우스급으로 지원하고, 지금 포커스가 어디 있는지 보여주는 <strong>포커스 링</strong>도 들어왔습니다.</li>
+      <li><strong>Googlebook(랩톱)까지 커버 · 테스트</strong> · adaptive로 짜두면 새 랩톱 폼팩터인 Googlebook에도 그대로 대응됩니다. Android Studio Canary의 Desktop Emulator로 미리 확인할 수 있습니다.</li>
+    </ul>
+    <figure class="fig"><img src="img/t6_morph_to_tablet.webp" alt="폰에서 태블릿으로 adaptive 레이아웃이 재구성되는 데모" loading="lazy"><figcaption>같은 앱이 폰에서 태블릿 화면으로 펼쳐지며 레이아웃이 재구성되는 모습<br><span class="src">출처: <a href="https://developer.android.com/blog/posts/building-for-the-intelligence-system-on-android">Android Developers</a></span></figcaption></figure>
+
+    <div class="box must">
+      <span class="lbl">필수 · Android 17 리사이저빌리티</span>
+      <p>Android 17(API 37)을 타깃하면, 대화면(<code>sw &gt; 600dp</code>)에서 앱이 걸어 둔 방향·비율·리사이저빌리티 제한을 시스템이 <strong>그냥 무시</strong>합니다(Android 16의 opt-out도 제거됨). 앱이 죽지는 않아도 <strong>UI 깨짐</strong>이 생깁니다. 세로 고정 레이아웃이 늘어나거나 잘리고, 카메라 프리뷰가 왜곡되고, 회전 시 상태가 손실됩니다.</p>
+      <p>개발자가 끌 수 있는 opt-out은 없습니다. 예외는 다음뿐입니다.</p>
+      <ul>
+        <li>게임 카테고리 앱</li>
+        <li>사용자가 기기 설정에서 직접 켠 opt-in</li>
+        <li>작은 화면(<code>sw &lt; 600dp</code>)</li>
+      </ul>
+      <p>시스템이 무시하는 속성은 이렇습니다.</p>
+      <ul>
+        <li><code>screenOrientation</code></li>
+        <li><code>resizableActivity</code></li>
+        <li><code>minAspectRatio</code> · <code>maxAspectRatio</code></li>
+        <li><code>setRequestedOrientation()</code></li>
+      </ul>
+      <p>결국 일반 서비스에는 adaptive가 유일한 답입니다.</p>
+    </div>
+
+    <figure class="fig"><img src="img/t6_image1.png" alt="대화면 리사이저빌리티 · 적용/미적용" loading="lazy"><figcaption>대화면 리사이저빌리티 · 적용/미적용 <span class="src">· 출처: Android Developers</span></figcaption></figure>
+    <h3>곧: Wear OS 7 &nbsp;·&nbsp; 관망: Android XR</h3>
+    <p><strong>Wear OS 7</strong>의 변화는 이렇습니다.</p>
+    <ul>
+      <li><strong>기반·배터리</strong> · Android 17 기반으로, 이전 세대(Wear OS 6) 대비 배터리를 최대 10% 아낍니다.</li>
+      <li><strong>Wear Widgets</strong> · 기존 Tiles가 Wear Widgets(2×1·2×2 타일)로 진화했습니다.</li>
+      <li><strong>Live Updates</strong> · 폰의 Live Updates가 워치 페이스로 올라와 기존 Ongoing Activities를 대체합니다.</li>
+      <li><strong>Gemini</strong> · 일부 워치에 온디바이스 Gemini가 들어옵니다(Nano v3 필요).</li>
+      <li><strong>일정</strong> · 지금 Canary 에뮬레이터로 개발할 수 있고, 정식 출시는 하반기입니다.</li>
+    </ul>
+    <p><strong>Android XR</strong>은 Developer Preview 4 단계입니다. SceneCore·ARCore for Jetpack XR이 곧 Beta, Unreal/Godot 공식 지원, 하드웨어는 Catalyst 프로그램(XREAL Project Aura). 지금 XR 앱을 본격적으로 만들 단계는 아닙니다. 다만 기존 adaptive 앱은 별도 작업 없이 몰입형 환경에 그대로 표시되므로, 이 글에서 다룬 <strong>Compose·adaptive·접근성 대응이 사실상 XR 준비를 겸합니다.</strong></p>
+    <ul class="refs">
+      <li><a href="https://developer.android.com/adaptive-apps">Adaptive apps</a> · <a href="https://developer.android.com/develop/ui/compose/layouts/adaptive/adaptive-dos-and-donts">Adaptive do's and don'ts</a></li>
+      <li><a href="https://developer.android.com/wear">Wear OS</a> · <a href="https://developer.android.com/xr">Android XR</a></li>
+    </ul>
+  </section>
+
+  <!-- ===================== CONCLUSION ===================== -->
+  <section id="wrap-up">
+    <span class="sec-tag">정리</span>
+    <h2 class="sec">여섯 주제 요약</h2>
+    <div class="rule"></div>
+    <table>
+      <tbody>
+        <tr><td><strong>1. UI</strong></td><td>View는 유지보수 모드, Compose가 기본 · 마이그레이션은 우리 것으로 튜닝한 Skill</td></tr>
+        <tr><td><strong>2. 성능</strong></td><td>R8 Analyzer로 최적화 점수 · Memory Limiter는 <code>ApplicationExitInfo</code>로 탐지</td></tr>
+        <tr><td><strong>3. AI</strong></td><td>앱이 에이전트에 기능 노출(App Functions) · 온디바이스 Gemini Nano 4</td></tr>
+        <tr><td><strong>4. 보안</strong></td><td>권한 대신 Picker(Photo/Contact) · Android 17 필수(SMS OTP·BAL·CT) <span class="pill red">🔴</span></td></tr>
+        <tr><td><strong>5. 미디어</strong></td><td>Media3 표준화 = PreloadManager 개선 + 백그라운드 제약 방어</td></tr>
+        <tr><td><strong>6. 멀티</strong></td><td>Adaptive by Default · 대화면 리사이저빌리티 필수 <span class="pill red">🔴</span></td></tr>
+      </tbody>
+    </table>
+    <div class="box must">
+      <span class="lbl">결론</span>
+      <p>표준 컴포넌트를 쓰고 adaptive하게 설계하면, 성능·보안·멀티 디바이스 대응의 상당 부분을 기능마다 따로 처리하지 않고 하나의 설계 결정으로 흡수할 수 있습니다. 비표준·고정 구현이 많을수록 Android 17 대응에 드는 작업이 늘어납니다. 위에서 🔴🟡🟢으로 나눈 우선순위 중 제일 급한 <strong>🔴 하나</strong>부터 시작하는 편이 현실적입니다.</p>
+    </div>
+  </section>
+
+</article>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="lock">Google I/O <span class="ex">Extended</span></p>
+    <p>What's New in Android 2026 · 배필주. 이 글은 30분 기술 세션을 블로그로 옮긴 것으로, 인용된 수치와 표현은 Android 공식 문서·블로그를 근거로 합니다. 각 섹션 하단 링크를 참고하세요.</p>
+  </div>
+</footer>
+
+</body>
+</html>
