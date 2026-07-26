@@ -124,7 +124,12 @@
   .refs li::before{content:"↳";color:var(--lgray);margin-right:8px}
 
   figure.fig{margin:28px 0}
-  figure.fig img{width:100%;border:1px solid var(--line);border-radius:14px;display:block;background:#fff}
+  figure.fig img{width:100%;max-width:100%;margin:0 auto;border:1px solid var(--line);border-radius:14px;display:block;background:#fff}
+  /* 세로형·저해상도 원본은 본문 폭까지 늘리면 흐려지므로 원본에 가깝게 폭을 제한 */
+  figure.fig.phone-sm img{max-width:220px}
+  figure.fig.phone img{max-width:300px}
+  figure.fig.tall img{max-width:460px}
+  figure.fig.mid img{max-width:620px}
   figure.fig figcaption{font-size:13.5px;color:var(--lgray);margin-top:10px;text-align:center}
   figure.fig .src{color:#b9bdc2}
   p.tsrc{font-size:13px;color:var(--lgray);margin:-6px 0 8px}
@@ -407,7 +412,7 @@ adb shell am memory-limiter ignore &lt;uid|all|none&gt;</pre>
       <li>"연락처 하나 골라 공유·초대" 유형 → Contact Picker로 대체(권한 제거)</li>
       <li>Picker로 핵심 기능을 제공하기 충분치 않은 경우에만 <code>READ_CONTACTS</code> 유지 + Play Console 사유 선언</li>
     </ol>
-    <figure class="fig"><img src="img/t4_contact_picker_modes.png" alt="Android 17 Contact Picker의 선택 모드" loading="lazy"><figcaption>Android 17 Contact Picker의 세 가지 선택 모드 · 단일 연락처, 다중 연락처, 다중 전화번호<br><span class="src">출처: <a href="https://developer.android.com/about/versions/17/features/contact-picker">Android 17 · Contact picker</a></span></figcaption></figure>
+    <figure class="fig mid"><img src="img/t4_contact_picker_modes.png" alt="Android 17 Contact Picker의 선택 모드" loading="lazy"><figcaption>Android 17 Contact Picker의 세 가지 선택 모드 · 단일 연락처, 다중 연락처, 다중 전화번호<br><span class="src">출처: <a href="https://developer.android.com/about/versions/17/features/contact-picker">Android 17 · Contact picker</a></span></figcaption></figure>
 
     <p><strong>SMS OTP</strong> · 이제 앱이 수신 대상이 아닌 일반 SMS의 OTP는 <a href="https://developer.android.com/about/versions/17/behavior-changes-17"><strong>수신 후 3시간 동안</strong></a> 앱에서 못 읽습니다. 가입·로그인 인증 자동입력이 여기 걸립니다. 3시간 지연을 피하려면 다음 두 방식 중 하나로 전환하면 됩니다.</p>
     <ul>
@@ -442,9 +447,9 @@ adb shell am memory-limiter ignore &lt;uid|all|none&gt;</pre>
 
     <h3><span class="pill green">개선</span> 여유 있을 때</h3>
     <p><strong><a href="https://developer.android.com/training/data-storage/shared/photo-picker/embedded">Embedded Photo Picker</a></strong> · 앱이 사진 권한을 아예 안 받아도 사용자가 고른 것만 넘어옵니다. 게다가 기존 권한은 로컬 파일만 봤지만 이건 <strong>Google Photos 같은 클라우드 라이브러리까지</strong> 접근합니다. 이 무권한·클라우드 접근은 <a href="https://developer.android.com/training/data-storage/shared/photo-picker">기본(시스템) Photo Picker</a>가 원래 제공하던 특징입니다.</p>
-    <figure class="fig"><img src="img/photo_picker_basic.gif" alt="시스템 Photo Picker · 권한 없이 고른 사진만 앱에 전달" loading="lazy"><figcaption>기본 Photo Picker · 권한 없이 사용자가 고른 사진만 앱에 전달<br><span class="src">출처: <a href="https://developer.android.com/training/data-storage/shared/photo-picker">Photo picker (Android Developers)</a></span></figcaption></figure>
+    <figure class="fig phone"><img src="img/photo_picker_basic.gif" alt="시스템 Photo Picker · 권한 없이 고른 사진만 앱에 전달" loading="lazy"><figcaption>기본 Photo Picker · 권한 없이 사용자가 고른 사진만 앱에 전달<br><span class="src">출처: <a href="https://developer.android.com/training/data-storage/shared/photo-picker">Photo picker (Android Developers)</a></span></figcaption></figure>
     <p>다만 기본 피커는 앱 위에 <strong>별도 모달</strong>로 떠서 화면이 전환되고, 그리드 디자인은 앱이 손댈 수 없습니다. <strong>Embedded Photo Picker</strong>는 그 피커를 <strong>앱 화면 안에 직접 심어</strong>, 화면 전환 없이 인앱에서 고르게 합니다. 무권한이라는 안전성은 그대로 두면서, 배치·높이·강조색·최대 선택 개수 같은 외형 일부를 앱이 제어할 수 있게 열어 주는 것이 핵심입니다. 그럼 어디까지 바꿀 수 있을까요. 커스터마이징 정도를 <strong>스펙트럼</strong>으로 정리하면 이렇습니다.</p>
-    <figure class="fig"><img src="img/photo_picker_embedded.gif" alt="Embedded Photo Picker · 앱 화면 안에 임베드되어 연속으로 사진을 선택" loading="lazy"><figcaption>Embedded Photo Picker · 앱 화면 안에 임베드되어 화면 전환 없이 연속 선택(위 기본 피커의 별도 모달과 비교)<br><span class="src">출처: <a href="https://developer.android.com/training/data-storage/shared/photo-picker/embedded">Embedded photo picker (Android Developers)</a></span></figcaption></figure>
+    <figure class="fig phone"><img src="img/photo_picker_embedded.gif" alt="Embedded Photo Picker · 앱 화면 안에 임베드되어 연속으로 사진을 선택" loading="lazy"><figcaption>Embedded Photo Picker · 앱 화면 안에 임베드되어 화면 전환 없이 연속 선택(위 기본 피커의 별도 모달과 비교)<br><span class="src">출처: <a href="https://developer.android.com/training/data-storage/shared/photo-picker/embedded">Embedded photo picker (Android Developers)</a></span></figcaption></figure>
     <ul>
       <li><strong>시스템 피커</strong> · 권한 없음, 커스텀 최소(그냥 띄우고 결과만 받음)</li>
       <li><strong>Embedded 피커 (권장)</strong> · 권한 없이도 <strong>앱 화면 안에 직접</strong> 임베드해, 화면 전환 없이 인앱에서 사진을 고릅니다. 렌더링이 <strong>SurfaceView 기반</strong>이라 그리드 내부 픽셀은 앱이 손대지 못하는 보안 영역(<em class="q">"광고 배너처럼 전용 영역으로 취급"</em>)이고, 그 덕에 권한이 필요 없습니다. 대표 강점은 <strong>연속 선택(Continuous)</strong> · 피커를 닫지 않고 계속 선택·해제하며 앱 UI 상태와 실시간 동기화됩니다. 배치·높이(<code>Modifier.height(500.dp)</code> 등)·<strong>강조색</strong>·최대 선택 개수·사전 선택 URI·MIME 타입 필터는 <code>FeatureInfo</code>로 조절하고(강조색 기본값은 시스템 다이내믹 컬러), 선택 썸네일은 내 UI로 그립니다. Android 14(API 34) + SDK Extensions 15 이상에서 동작하며, 미충족 기기는 Play 서비스로 백포트됩니다. Compose는 <code>EmbeddedPhotoPicker</code> 컴포저블, View는 <code>EmbeddedPhotoPickerView</code>를 씁니다.</li>
@@ -462,7 +467,7 @@ adb shell am memory-limiter ignore &lt;uid|all|none&gt;</pre>
 
     <figure class="fig"><img src="img/slide_photopicker_spectrum.png" alt="사진 선택 커스텀 스펙트럼 · 시스템 · Embedded(권장) · Partial" loading="lazy"><figcaption>사진 선택 커스텀 스펙트럼 · 시스템 · Embedded(권장) · Partial<br><span class="src">출처: <a href="https://developer.android.com/training/data-storage/shared/photo-picker/embedded">Embedded Photo Picker</a>, <a href="https://developer.android.com/blog/posts/the-embedded-photo-picker">The Embedded Photo Picker (blog)</a></span></figcaption></figure>
     <p><strong>Credential Manager</strong> · 비밀번호·패스키·소셜 로그인을 하나의 API로 묶습니다. 주목할 건 <strong>conditional create</strong>. 기존 비밀번호로 로그인한 유저에게, 로그인 흐름을 방해하지 않고 <strong>일반 bottom sheet UI 없이</strong> 조용히 패스키를 만들어두고 사용자에겐 알림으로 알립니다. 유저를 귀찮게 하지 않고 패스키로 넘길 수 있어, 전환율 손실 없이 로그인을 점진적으로 강화할 수 있습니다.</p>
-    <figure class="fig"><img src="img/t4_credman_ui.png" alt="Credential Manager 통합 로그인 UI (Figure 1)" loading="lazy"><figcaption>Credential Manager 통합 로그인 UI (Figure 1) <span class="src">· 출처: Android Developers</span></figcaption></figure>
+    <figure class="fig tall"><img src="img/t4_credman_ui.png" alt="Credential Manager 통합 로그인 UI (Figure 1)" loading="lazy"><figcaption>Credential Manager 통합 로그인 UI (Figure 1) <span class="src">· 출처: Android Developers</span></figcaption></figure>
 
     <div class="box must">
       <span class="lbl">우선순위 · 우리 앱에 해당하는 🔴부터</span>
@@ -487,7 +492,7 @@ adb shell am memory-limiter ignore &lt;uid|all|none&gt;</pre>
 
     <h3>하나의 연결된 파이프라인</h3>
     <p>예전엔 촬영·편집·재생·캐스팅을 각각 다른 API로 엮어야 했는데, 이제 하나의 파이프라인이 됐습니다. 촬영은 <strong>CameraX</strong>(저조도는 <code>Low Light Boost</code>로 실시간 보정, <code>CameraXViewfinder</code>), 후처리는 <strong>Media3 AI Effects</strong>(Enhance · Magic Eraser · Studio Sound), 재생은 <strong>ExoPlayer</strong>(PreloadManager · Scrubbing).</p>
-    <figure class="fig"><img src="img/t5_low_light_boost.webp" alt="Low Light Boost 적용 전후 · 실시간 카메라 프리뷰 밝기 보정" loading="lazy"><figcaption>CameraX Low Light Boost · 저조도 실시간 프리뷰 밝기 보정 (Instagram, Pixel 10 Pro)<br><span class="src">출처: <a href="https://developer.android.com/blog/posts/brighten-your-real-time-camera-feeds-with-low-light-boost">Brighten Your Real-Time Camera Feeds with Low Light Boost</a></span></figcaption></figure>
+    <figure class="fig phone-sm"><img src="img/t5_low_light_boost.webp" alt="Low Light Boost 적용 전후 · 실시간 카메라 프리뷰 밝기 보정" loading="lazy"><figcaption>CameraX Low Light Boost · 저조도 실시간 프리뷰 밝기 보정 (Instagram, Pixel 10 Pro)<br><span class="src">출처: <a href="https://developer.android.com/blog/posts/brighten-your-real-time-camera-feeds-with-low-light-boost">Brighten Your Real-Time Camera Feeds with Low Light Boost</a></span></figcaption></figure>
 
     <h3>Media3 PreloadManager · 넘기는 순간 지연 없음</h3>
     <p>숏폼 피드나 캐러셀처럼 영상을 연속으로 넘겨 보는 서비스에 제일 와닿는 기능입니다. 다음 영상으로 넘어갈 때마다 로딩을 기다리면 경험이 나빠지고, 그렇다고 모든 후보를 미리 다 받아 두면 데이터와 배터리를 낭비합니다. <a href="https://developer.android.com/media/media3/exoplayer/preloading-media/preloadmanager"><code>DefaultPreloadManager</code></a>는 이 둘 사이의 균형을 잡아 주는 도구입니다.</p>
@@ -560,7 +565,7 @@ adb shell am memory-limiter ignore &lt;uid|all|none&gt;</pre>
     <h3>대화면 · 왜 지금인가</h3>
     <p>삼성 갤럭시 폴드 8처럼 펼치면 넓은 화면이 되는 폼팩터가 이제 특수한 기기를 넘어 상시 들고 다니는 디바이스의 한 형태로 자리 잡았습니다. 특히 <strong>펼친 상태의 가로 모드</strong>는 폰용 세로 고정 레이아웃으로는 감당이 안 됩니다. 회전하면 UI가 늘어나거나 잘리고, 상태가 날아가기도 합니다. 우리 앱이 대응해야 하는 실제 사용 형태가 된 것입니다.</p>
     <p>규모도 근거가 됩니다. 대화면 기기는 이미 <strong>580M대</strong>를 넘었고, Google 내부 데이터 기준 폰과 태블릿을 함께 쓰는 유저는 폰만 쓰는 유저보다 약 <strong>9배</strong>, 폴더블 유저는 최대 <strong>14배</strong>를 지출합니다. 여기에 Google Play는 adaptive 품질 기준을 충족한 앱에 <strong>"Optimized for large screens"</strong> 배지를 달아, 검색·추천에서 노출이 유리해집니다.</p>
-    <figure class="fig"><img src="img/t6_large_screen_badge.png" alt="Google Play 대화면 배지와 기기별 평점 (Phone·Tablet·Chromebook)" loading="lazy"><figcaption>Google Play의 대화면 최적화 배지와 기기별 평점 · Phone·Tablet·Chromebook 각각 표시<br><span class="src">출처: Android Developers</span></figcaption></figure>
+    <figure class="fig tall"><img src="img/t6_large_screen_badge.png" alt="Google Play 대화면 배지와 기기별 평점 (Phone·Tablet·Chromebook)" loading="lazy"><figcaption>Google Play의 대화면 최적화 배지와 기기별 평점 · Phone·Tablet·Chromebook 각각 표시<br><span class="src">출처: Android Developers</span></figcaption></figure>
     <p>그럼 실제로 어떻게 적응시킬까요. Compose가 제공하는 도구는 이렇습니다.</p>
     <ul>
       <li><strong>Window size class로 레이아웃 분기</strong> · 앱이 현재 창 크기 등급(Compact·Medium·Expanded)을 읽어 레이아웃을 바꿉니다. 폰 같은 좁은 화면에서는 한 화면만 보여주고, 태블릿처럼 넓은 화면에서는 목록과 상세를 나란히 두는 식입니다.</li>
