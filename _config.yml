@@ -39,6 +39,7 @@ paginate: 5
 paginate_path: "/blog/page:num"
 
 # BUILD SETTINGS
+future: true
 sass:
   style: compressed
 plugins: [jekyll-paginate, jekyll-seo-tag, jekyll-feed]

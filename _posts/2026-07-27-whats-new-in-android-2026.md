@@ -2,7 +2,7 @@
 layout: post
 title: "What's New in Android 2026"
 color: rgb(61, 220, 132)
-date: 2026-07-27 12:00:00 +0900
+date: 2026-07-27 00:00:00 +0900
 tags: [Android, Google I/O, Compose, Media3, Adaptive, Android 17]
 ---
 
